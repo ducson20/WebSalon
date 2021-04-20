@@ -10,11 +10,15 @@ public interface ImageServiceeService {
 	
 	ImageService save(ImageService entity);
 	
+	void deleteById(Integer id);
+	
 	List<ImageService> findImageServiceByServiceDetailId(int serviceDetailID);
 	
 //	List<ImageService> findImageServiceByServiceDetailId(int serviceDetailID);
 	
 	void insertImgServiceDetail(@Param("serviceDetailID") Integer serviceDetailID, @Param("linkImage") String linkImage);
+
+	void deleteAll(List<ImageService> entities);
 
 	
 }

@@ -15,9 +15,12 @@ public interface ClientService {
 
 	Client save(Client entity);
 
-	void registerNewClientAfterOAuthLoginSuccess(String email, String name, AuthenticationProvider facebook);
+	void registerNewClientAfterOAuthLoginSuccess(String email, String name);
 
-	void updateExitClientAfterOAthLoginSuccess(Client client, String name, AuthenticationProvider uthProvider);
+	void updateExitClientAfterOAuthLoginSuccess(Client client, String name, AuthenticationProvider uthProvider);
+
+	
+	void updateExitClientAfterOAuthLoginSuccessHasRole(Client client, AuthenticationProvider uthProvider);
 
 
 }

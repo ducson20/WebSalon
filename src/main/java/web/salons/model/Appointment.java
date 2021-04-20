@@ -48,7 +48,19 @@ public class Appointment implements java.io.Serializable {
 		this.listServices = listServices;
 	}
 
-	public Appointment(Employee employees, Salon salons, Date timeBooked, Boolean canceled,
+	public Appointment(Client clients, Employee employees, Salon salons, Date timeBooked, Boolean canceled,
+			Date dateBooked, String phone, String listServices) {
+		super();
+		this.clients = clients;
+		this.employees = employees;
+		this.salons = salons;
+		this.timeBooked = timeBooked;
+		this.canceled = canceled;
+		this.dateBooked = dateBooked;
+		this.phone = phone;
+		this.listServices = listServices;
+	}
+	public Appointment( Employee employees, Salon salons, Date timeBooked, Boolean canceled,
 			Date dateBooked, String phone, String listServices) {
 		super();
 		this.employees = employees;

@@ -30,9 +30,6 @@ public class Services implements java.io.Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "services")
 	private Set<ServiceDetail> servicesDetailses = new HashSet<ServiceDetail>(0);
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "services")
-	private Set<ImageService> imageServices = new HashSet<ImageService>(0);
-	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "services")
 	private Set<Appointment> appointmentses = new HashSet<Appointment>(0);
@@ -70,14 +67,6 @@ public class Services implements java.io.Serializable {
 		this.servicesDetailses = servicesDetailses;
 	}
 	
-	public Set<ImageService> getImageServices() {
-		return imageServices;
-	}
-
-	public void setImageServices(Set<ImageService> imageServices) {
-		this.imageServices = imageServices;
-	}
-
 	public Set<Appointment> getAppointmentses() {
 		return this.appointmentses;
 	}

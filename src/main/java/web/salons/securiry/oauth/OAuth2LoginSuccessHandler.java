@@ -32,10 +32,10 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 		System.err.println(client);
 		 
 		if (client == null) {
-			clientService.registerNewClientAfterOAuthLoginSuccess(email, name, AuthenticationProvider.facebook);
+//			clientService.registerNewClientAfterOAuthLoginSuccess(email, name, AuthenticationProvider.facebook);
 
 		} else {
-			clientService.updateExitClientAfterOAthLoginSuccess(client, name, AuthenticationProvider.facebook);
+//			clientService.updateExitClientAfterOAthLoginSuccess(client, name, AuthenticationProvider.facebook);
 
 		}
 		super.onAuthenticationSuccess(request, response, authentication);

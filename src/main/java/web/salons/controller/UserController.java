@@ -67,7 +67,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
-	public String accessDenied(Model model, Principal principal, HttpServletRequest req) {
+	public String accessDenied(Model model , Principal principal, HttpServletRequest req) {
 
 		if (principal != null) {
 			User loginedUser = (User) ((Authentication) principal).getPrincipal();
@@ -94,9 +94,10 @@ public class UserController {
 		acc.setHashSendMail(EncrytedPasswordUtils.encrytePassword(randomNumber));
 		acc.setPassword(EncrytedPasswordUtils.encrytePassword(acc.getPassword()));
 		clientService.save(acc);
-		List<String> roles = new ArrayList<String>();
-		roles.add("ROLE_USER");
-		roleService.createRoleFor(clientService.findUserClient(acc.getUserEmail()), roles);
+//		List<String> roles = new ArrayList<String>();
+//		roles.add("ROLE_USER");
+		String role = "ROLE_USER";
+		roleService.createRoleFor(clientService.findUserClient(acc.getUserEmail()), role);
 		model.addAttribute("message", "REGISTER_SUCCESS");
 		return "login";
 	}

@@ -13,19 +13,15 @@
 <body>
 	<%@ include file="/WEB-INF/jsp/common-user/topBar.jsp"%>
 	<%@ include file="/WEB-INF/jsp/common-user/navBar.jsp"%>
+	<!-- 	<div class="blue block"> -->
 	<section class="card-booking">
-		<h5 class="card-header">Appointment</h5>
+		<h3 class="card-header">Appointment</h3>
 		<form id="regForm" action="/booking" method="POST">
-			<div id="myModal" class="modal" tabindex="-1" role="dialog"
-				style="margin-top: 40px;">
-				<div class="modal-dialog" role="document">
+			<div id="myModal" class="modal" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document" style="margin-top: 40px;">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title">Phone</h5>
-							<!-- 							<button type="button" class="close" data-dismiss="modal" -->
-							<!-- 								aria-label="Close"> -->
-							<!-- 								<span aria-hidden="true">&times;</span> -->
-							<!-- 							</button> -->
+							<h3 class="modal-title">Phone</h3>
 						</div>
 						<div class="modal-body">
 							<input type="text" id="phone" name="phone"
@@ -34,19 +30,17 @@
 						</div>
 						<div class="modal-body"
 							style="text-align: center; color: black; margin-top: -25px;">
-							<a href="/" style="color: #151515;"> Click to return home
+							<a href="/" style="color: #151515;"> >> Click to return home
 								page</a>
 						</div>
 						<div class="modal-footer">
-							<!-- 							<button type="button" class="btn btn-secondary" -->
-							<!-- 								data-dismiss="modal">Close</button> -->
-							<button type="button" class="btn btn-warning" id="save-phone"
+							<button type="button" class="" id="save-phone"
 								data-dismiss="modal" style="width: 100%">Booking Now</button>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="relative" style="position: relative;">
+			<div class="relative">
 				<div class="tab">
 					<div class="progress">
 						<div class="progress-bar bg-warning" role="progressbar"
@@ -54,14 +48,15 @@
 							aria-valuemax="100"></div>
 					</div>
 					<div class="card-body">
-						<label for="formGroupExampleInput">Address</label>
+						<h2>Address</h2>
 						<div class="row">
 							<div class="form-group col">
 								<select class="custom-select address-salon" name="salon"
 									id="address-salon">
 									<option value="0">Please selected</option>
 									<c:forEach var="listAdd" items="${listAddressOfSalon}">
-										<option value="${listAdd.salonId}">${listAdd.address}</option>
+										<option value="${listAdd.salonId}">${listAdd.roadAndNumber}
+											- ${listAdd.ward} - ${listAdd.city}</option>
 									</c:forEach>
 								</select>
 								<p class="text-wraming"></p>
@@ -75,123 +70,210 @@
 							style="width: 50%" aria-valuenow="50" aria-valuemin="0"
 							aria-valuemax="100"></div>
 					</div>
-					<div class="card-body">
+					<div class="card-body" style="position: relative;">
 						<c:forEach var="listService" items="${listService}">
+
 							<c:if test="${listService.serviceId == 'H'}">
 								<div class="row">
 									<div class="headerService">
-										<h5 style="margin-left: 35px; margin-bottom: -8px;">${listService.serviceName}</h5>
+										<h1>${listService.serviceName}</h1>
 									</div>
 								</div>
-								<hr style="border: 1px solid #C0C0C0;">
-								<c:forEach var="listServiceDetailH"
-									items="${listServiceDetailH}">
+								<c:forEach var="serviceDetail" items="${listServiceDetailH}">
 									<div class="row">
 										<div class="col col-md-3">
-											<p style="margin: 16px 0 0 40px;">
-												<input type="checkbox" name="listServices"
-													value="${listServiceDetailH.title}">
+											<input type="checkbox" name="listServices"
+												value="${serviceDetail.title}">
 											</p>
 										</div>
 
 										<div class="col col-md-6">
-											<h6>${listServiceDetailH.title}</h6>
-											<p>${listServiceDetailH.descripttion}</p>
+											<h6>${serviceDetail.title}</h6>
+											<p>${serviceDetail.descripttion}</p>
 										</div>
 										<div class="col col-md-3">
-											<h6>${listServiceDetailH.price}K</h6>
-											<p>${listServiceDetailH.timeToComplete}minitue</p>
+											<h6>$${serviceDetail.price}</h6>
+											<p>${serviceDetail.timeToComplete}minitue</p>
 										</div>
 									</div>
 								</c:forEach>
+								<div class="box"></div>
 							</c:if>
-
 							<c:if test="${listService.serviceId == 'HD'}">
 								<div class="row">
 									<div class="headerService">
-										<h5 style="margin-left: 35px; margin-bottom: -8px;">${listService.serviceName}</h5>
+										<h1>${listService.serviceName}</h1>
 									</div>
 								</div>
-								<hr style="border: 1px solid #C0C0C0;">
-								<c:forEach var="listServiceDetailHD"
-									items="${listServiceDetailHD}">
+								<c:forEach var="serviceDetail" items="${listServiceDetailHD}">
 									<div class="row">
 										<div class="col col-md-3">
 											<p style="margin: 16px 0 0 40px;">
 												<input type="checkbox" name="listServices"
-													value="${listServiceDetailHD.title}">
+													value="${serviceDetail.title}">
 											</p>
 										</div>
 
 										<div class="col col-md-6">
-											<h6>${listServiceDetailHD.title}</h6>
-											<p>${listServiceDetailHD.descripttion}</p>
+											<h6>${serviceDetail.title}</h6>
+											<p>${serviceDetail.descripttion}</p>
 										</div>
 										<div class="col col-md-3">
-											<h6>${listServiceDetailHD.price}K</h6>
-											<p>${listServiceDetailHD.timeToComplete}minitue</p>
+											<h6>${serviceDetail.price}K</h6>
+											<p>${serviceDetail.timeToComplete}minitue</p>
 										</div>
 									</div>
 								</c:forEach>
+								<div class="box"></div>
+
 							</c:if>
 							<c:if test="${listService.serviceId == 'HC'}">
 								<div class="row">
 									<div class="headerService">
-										<h5 style="margin-left: 35px; margin-bottom: -8px;">${listService.serviceName}</h5>
+										<h1>${listService.serviceName}</h1>
 									</div>
 								</div>
 								<hr style="border: 1px solid #C0C0C0;">
-								<c:forEach var="listServiceDetailHC"
-									items="${listServiceDetailHC}">
+								<c:forEach var="serviceDetail" items="${listServiceDetailCH}">
 									<div class="row">
 										<div class="col col-md-3">
 											<p style="margin: 16px 0 0 40px;">
 												<input type="checkbox" name="listServices"
-													value="${listServiceDetailHC.title}">
+													value="${serviceDetail.title}">
 											</p>
 										</div>
 										<div class="col col-md-6">
-											<h6>${listServiceDetailHC.title}</h6>
-											<p>${listServiceDetailHC.descripttion}</p>
+											<h6>${serviceDetail.title}</h6>
+											<p>${serviceDetail.descripttion}</p>
 										</div>
 										<div class="col col-md-3">
-											<h6>${listServiceDetailHC.price}K</h6>
-											<p>${listServiceDetailHC.timeToComplete}minitue</p>
+											<h6>${serviceDetail.price}K</h6>
+											<p>${serviceDetail.timeToComplete}minitue</p>
 										</div>
 									</div>
 								</c:forEach>
+								<div class="box"></div>
+
 							</c:if>
 							<c:if test="${listService.serviceId == 'OT'}">
 								<div class="row">
 									<div class="headerService">
-										<h5 style="margin-left: 35px; margin-bottom: -8px;">${listService.serviceName}</h5>
+										<h1>${listService.serviceName}</h1>
 									</div>
 								</div>
-								<hr style="border: 1px solid #C0C0C0;">
-								<c:forEach var="listServiceDetailOT"
-									items="${listServiceDetailOT}">
+								<div class="box"></div>
+								<c:forEach var="serviceDetail" items="${listServiceDetailOT}">
 									<div class="row">
 										<div class="col col-md-3">
 											<p style="margin: 16px 0 0 40px;">
 												<input type="checkbox" name="listServices"
-													value="${listServiceDetailOT.title}">
+													value="${serviceDetail.title}">
 											</p>
 										</div>
 
 										<div class="col col-md-6">
-											<h6>${listServiceDetailOT.title}</h6>
-											<p>${listServiceDetailOT.descripttion}</p>
+											<h6>${serviceDetail.title}</h6>
+											<p>${serviceDetail.descripttion}</p>
 										</div>
 										<div class="col col-md-3">
-											<h6>${listServiceDetailOT.price}K</h6>
-											<p>${listServiceDetailOT.timeToComplete}minitue</p>
+											<h6>${serviceDetail.price}K</h6>
+											<p>${serviceDetail.timeToComplete}minitue</p>
 										</div>
 									</div>
 								</c:forEach>
+								<div class="box"></div>
 							</c:if>
 						</c:forEach>
 					</div>
 				</div>
+				<div class="tab">
+					<div class="note">
+						<div class="note-info">
+							<div class="row">
+								<div class="">
+									<h2>EACH PHONE BOOKED FOR 1 PERSON</h2>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-8 col-md-8">
+									<p>If you want to schedule a group of people, please press
+										the free call button for CSKH for support group scheduling.</p>
+								</div>
+								<div class="col-lg-4 col-md-4">
+									<button>Mien Phi</button>
+								</div>
+
+							</div>
+						</div>
+						<div class="box"></div>
+						<div class="note-info">
+							<div class="row">
+								<div class="">
+									<h2>FREE SPECIAL REQUIREMENTS</h2>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox">
+								</div>
+								<div class="col-lg-11 col-md-11">
+									<p>He was in a hurry, to spend less time washing, wanted to
+										cut it soon.</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox">
+								</div>
+								<div class="col-lg-11 col-md-11">
+									<p>Cover cut (scars, milia, flat head).</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox">
+								</div>
+								<div class="col-lg-11 col-md-11">
+									<p>His skin is easily irritated.</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox">
+								</div>
+								<div class="col-lg-11 col-md-11">
+									<p>Ask carefully before and during cutting.</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox">
+								</div>
+								<div class="col-lg-11 col-md-11">
+									<p>Instructions for self-waxing at home.</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox">
+								</div>
+								<div class="col-lg-11 col-md-11">
+									<p>Do not wash vigorously with your nails.</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox">
+								</div>
+								<div class="col-lg-11 col-md-11">
+									<p>New hairstyle advice.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<div class="tab">
 					<div class="progress">
 						<div class="progress-bar bg-warning" role="progressbar"
@@ -232,26 +314,102 @@
 						</div>
 					</div>
 				</div>
-				<div
-					style="overflow: auto; position: sticky; height: 70px; bottom: 0; width: 500px; margin-left: 20px; border-radius: 8px; background-color: #151515">
-					<div class="change-fixed"
-						style="float: right; right: 30px; margin-top: 15px; margin-right: 10px">
-						<button type="button" class="btn btn-warning " id="prevBtn"
-							onclick="nextPrev(-1)">Previous</button>
-						<button type="button" class="btn btn-warning btn-fixed"
-							id="nextBtn" onclick="nextPrev(1)">Next</button>
+
+				<div class="sticky">
+					<div class="info-appointment">
+
+						<div class="salon-address">
+							<div class="row">
+								<div class="col">
+									<h2>
+										<i class="fa fa-map-marker" aria-hidden="true"></i> Salon
+									</h2>
+									<p>65 Thanh Nien Dong Hoi Quang Binh</p>
+								</div>
+
+							</div>
+						</div>
+
+
+						<div class="info-detail">
+							<div class="row">
+								<div class="col-lg-4 col-md-6 col-xs-4">
+									<h2>
+										<i class="fa fa-calendar" aria-hidden="true"></i> Ngay
+									</h2>
+									<p>16-04-2021</p>
+								</div>
+								<div class="col-lg-4 col-md-6 col-xs-4">
+									<h2>
+										<i class="fa fa-clock-o" aria-hidden="true"></i> Gio
+									</h2>
+									<p>08:00</p>
+								</div>
+								<div class="col-lg-4 col-md-6 col-xs-4">
+									<h2>
+										<i class="fa fa-user" aria-hidden="true"></i> Stylist
+									</h2>
+									<p>Duc Son</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="service-choosen">
+							<div class="row">
+								<div class="col">
+									<h2>
+										<i class="menu-icon fa fa-glass"></i> Service Choosen
+									</h2>
+									<p>Duc Son</p>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<div class="footer-appointment">
+								<div class="icon-info-appointment">
+									<img class="img-bag"
+										src="<%request.getContextPath();%>/images/bag-icon.png" alt="">
+								</div>
+								<div class="change-fixed"
+									style="float: right; right: 30px; margin-top: 15px; margin-right: 10px">
+									<button type="button" class="" id="prevBtn"
+										onclick="nextPrev(-1)">Previous</button>
+									<button type="button" class=" btn-fixed" id="nextBtn"
+										onclick="nextPrev(1)">Next</button>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
 		</form>
+
 	</section>
+
+	<!-- 	</div> -->
 	<%@ include file="/WEB-INF/jsp/common-user/footer.jsp"%>
 	<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+
 	<%@ include file="/WEB-INF/jsp/common-user/script.jsp"%>
-<!-- 	<script -->
-<%-- 		src="<%=request.getContextPath()%>/ValidateForm/jquery.validate.js"></script> --%>
-<%-- 	<script src="<%=request.getContextPath()%>/ValidateForm/booking.js"></script> --%>
+
+	<!-- 	<script -->
+	<%-- 		src="<%=request.getContextPath()%>/ValidateForm/jquery.validate.js"></script> --%>
+	<%-- 	<script src="<%=request.getContextPath()%>/ValidateForm/booking.js"></script> --%>
+
+
+	<script>
+		$(document).ready(function() {
+		  $('.img-bag').click(function() {
+		    $('.info-appointment').slideToggle("slow");
+		    // Alternative animation for example
+		    // slideToggle("fast");
+		  });
+		});
+	</script>
 	<script>
 		$('#save-phone').click(function(event){
 			
@@ -263,11 +421,17 @@
 		})
 	</script>
 
+
+
 	<script>
+		//Show modal enter phone
 		$(document).ready(function(){
 			$('#myModal').modal({backdrop: 'static', keyboard: false})  
 		})
 	</script>
+
+
+
 	<script type="text/javascript">
 	//Load page request URL salon nd phone
 	$(document).ready(function(){
@@ -330,8 +494,8 @@
 	        document.getElementById("prevBtn").style.display = "inline";
 	    }
 	    
-	    //Step = 2 for submit form
-	    if(n==2){
+	    //Step = 3 for submit form
+	    if(n==3){
 	    
 	    	// Time null alert message
 	    	$(document).ready(function(){
@@ -463,7 +627,6 @@
 						        url: urlStr,
 						        dataType: "json",
 						    }).done(function (timeOfEmpSalon) {
-						    console.log(timeOfEmpSalon)
 							// Time of employee list by salonID					
 							const timeEmpBySalonID = timeOfEmpSalon[0];
 							const strTotimeAllEmpBySalonID = timeEmpBySalonID.toString();
@@ -540,14 +703,19 @@
 					       		 
 						          const dateVal = $('.list-date').val();
 						    	  const dateValToDate = moment(dateVal, 'MM/DD/YYYY').toDate();
-						    	  if(disableTime.length > 0){
-						    	  		//alert('Other Null')
+						    	 
 							    	  	if (dateValToDate.getDate() === localTime.getDate()) {
 							    	  		//alert('Today')
-							            	$('.list-time').html('');
-								            disableTime.map(function (value, index) {
-								                $('.list-time').append($('<option></option>').val(value).html(value));
-								            })
+							    	  		 if(disableTime.length > 0){
+						    	  				//alert('Other Null')
+							            		$('.list-time').html('');
+								           		 disableTime.map(function (value, index) {
+								              		  $('.list-time').append($('<option></option>').val(value).html(value));
+								           		 })
+							    	  		 }else{
+											    alertForTimeSalon();
+										      	$('.list-time').html('');
+											  } 
 							          	}else{
 							          		//alert('Tomorror')
 							          		//$('.list-fullNames').prop('selectedIndex',0);
@@ -557,11 +725,7 @@
 								                $('.list-time').append($('<option></option>').val(value).html(value));
 								            })
 							       	  	}	
-						    	  }
-						    	  else{
-								    	 alertForTimeSalon();
-							      		 $('.list-time').html('');
-								  } 	 
+						    	 	 
 							});		
 					
 					})
@@ -605,26 +769,30 @@
 				        	
 				        	const dateVal = $('.list-date').val();
 						    const dateValToDate = moment(dateVal, 'MM/DD/YYYY').toDate();
-						   	if(disableTime.length > 0){
-						    	//alert('Other Null')
+				        	
+						    
+						 
+			
 							   	if (dateValToDate.getDate() === localTime.getDate()) {
-							    	  //alert('Today')
-							          $('.list-time').html('');
-								      disableTime.map(function (value, index) {
-								             $('.list-time').append($('<option></option>').val(value).html(value));
+							   	  		if(disableTime.length > 0){
+								    	 	 alert('Today')
+								         	 $('.list-time').html('');
+									     	 disableTime.map(function (value, index) {
+									             $('.list-time').append($('<option></option>').val(value).html(value));
+									     	 })
+							   	 		}else{
+										 	 alertForTimeSalon();
+									     	 $('.list-time').html('');
+								 		} 
+							    }else{
+							         alert('Tomorror')
+							         //$('.list-fullNames').prop('selectedIndex',0);
+								     $('.list-time').html('');
+								     checkTimeOfEmp.map(function (value, i) {
+								          $('.list-time').append($('<option></option>').val(value).html(value));
 								      })
-							          }else{
-							          		//alert('Tomorror')
-							          		//$('.list-fullNames').prop('selectedIndex',0);
-								            $('.list-time').html('');
-								            checkTimeOfEmp.map(function (value, i) {
-								                $('.list-time').append($('<option></option>').val(value).html(value));
-								            })
-							       	  }	
-						   	}else{
-								  alertForTimeSalon();
-							      $('.list-time').html('');
-							} 					
+							    }	
+						   						
 					});
 				}
 				

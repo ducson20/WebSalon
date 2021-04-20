@@ -11,14 +11,14 @@
 				<i class="fa fa-bars"></i>
 			</button>
 			<a class="navbar-brand" href="./"><img
-				src="<% request.getContextPath(); %>/images/logo.png" alt="Logo"></a> <a
-				class="navbar-brand hidden" href="./"><img
-				src="<% request.getContextPath(); %>/images/logo2.png" alt="Logo"></a>
+				src="<%request.getContextPath();%>/images/logo.png" alt="Logo"></a>
+			<a class="navbar-brand hidden" href="./"><img
+				src="<%request.getContextPath();%>/images/logo2.png" alt="Logo"></a>
 		</div>
 
 		<div id="main-menu" class="main-menu collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="index.html"> <i
+				<li class="active"><a href="/admin/servicedetails"> <i
 						class="menu-icon fa fa-dashboard"></i>Dashboard
 				</a></li>
 				<h3 class="menu-title">Duc Chanh Salon</h3>
@@ -27,32 +27,44 @@
 					aria-expanded="false"> <i class="menu-icon fa fa-glass"></i>Service
 				</a>
 					<ul class="sub-menu children dropdown-menu">
-						<li><i class="menu-icon fa fa-sign-in"></i><a
-							href="page-login.html">Services</a></li>
-						<li><i class="menu-icon fa fa-sign-in"></i><a
-							href="page-register.html">New Service</a></li>
+						<li><i class="menu-icon fa fa-table"></i><a
+							href="<%request.getContextPath();%>/admin/servicedetails">Services</a></li>
+						<li><i class="menu-icon fa fa-table"></i><a
+							href="<%request.getContextPath();%>/admin/new/servicedetail">New
+								Service</a></li>
 						<li>
 					</ul></li>
 				<li class="menu-item-has-children dropdown"><a href="#"
 					class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"> <i class="menu-icon fa fa-glass"></i>Salon
+					aria-expanded="false"> <i class="menu-icon fa fa-home"></i>Salon
 				</a>
 					<ul class="sub-menu children dropdown-menu">
-						<li><i class="menu-icon fa fa-sign-in"></i><a
-							href="page-login.html">Salons</a></li>
-						<li><i class="menu-icon fa fa-sign-in"></i><a
-							href="page-register.html">New Salon</a></li>
+						<li><i class="menu-icon fa fa-table"></i><a
+							href="<%request.getContextPath();%>/admin/salons">Salons</a></li>
+						<li><i class="menu-icon fa fa-table"></i><a
+							href="<%request.getContextPath();%>/admin/new/salon">New
+								Salon</a></li>
 						<li>
 					</ul></li>
 				<li class="menu-item-has-children dropdown"><a href="#"
 					class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"> <i class="menu-icon fa fa-glass"></i>Staff
+					aria-expanded="false"> <i class="menu-icon fa fa-users"></i>Staff
 				</a>
 					<ul class="sub-menu children dropdown-menu">
-						<li><i class="menu-icon fa fa-sign-in"></i><a
-							href="page-login.html">Staffs</a></li>
-						<li><i class="menu-icon fa fa-sign-in"></i><a
-							href="page-register.html">New Staff</a></li>
+						<li><i class="menu-icon fa fa-table"></i><a
+							href="<%request.getContextPath();%>/admin/staffs">Staffs</a></li>
+						<li><i class="menu-icon fa fa-table"></i><a
+							href="<%request.getContextPath();%>/admin/new/staff">New
+								Staff</a></li>
+						<li>
+					</ul></li>
+				<li class="menu-item-has-children dropdown"><a href="#"
+					class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Account
+				</a>
+					<ul class="sub-menu children dropdown-menu">
+						<li><i class="menu-icon fa fa-table"></i><a
+							href="<%request.getContextPath();%>/admin/userdetails">Users</a></li>
 						<li>
 					</ul></li>
 				<h3 class="menu-title">UI elements</h3>

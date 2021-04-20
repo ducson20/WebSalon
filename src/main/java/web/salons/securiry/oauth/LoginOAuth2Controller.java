@@ -1,6 +1,7 @@
 package web.salons.securiry.oauth;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -24,6 +25,8 @@ import org.springframework.web.client.RestTemplate;
 import web.salons.model.AuthenticationProvider;
 import web.salons.model.Client;
 import web.salons.service.ClientService;
+import web.salons.service.RoleService;
+import web.salons.service.UserRoleService;
 
 @Controller
 public class LoginOAuth2Controller {
@@ -37,13 +40,20 @@ public class LoginOAuth2Controller {
 	@Autowired
 	private ClientService clientService;
 
+	@Autowired
+	private UserRoleService userRoleService;
+
+	@Autowired
+	private RoleService roleService;
+
 	@RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
-	public String getLoginInfo(Model model, Client account, AuthenticationProvider authProvider,
+	public String getLoginInfo(Model model, AuthenticationProvider authProvider,
 			OAuth2AuthenticationToken authentication, HttpSession session) {
 
 		OAuth2AuthorizedClient client = authorizedClientService
 				.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-		System.err.println(client.getPrincipalName());
+
+		String accessToken = client.getAccessToken().getTokenValue();
 		String userInfoEndpointUri = client.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUri();
 		if (!StringUtils.isEmpty(userInfoEndpointUri)) {
 			RestTemplate restTemplate = new RestTemplate();
@@ -54,36 +64,56 @@ public class LoginOAuth2Controller {
 			ResponseEntity<Map> response = restTemplate.exchange(userInfoEndpointUri, HttpMethod.GET, entity,
 					Map.class);
 			Map userAttributes = response.getBody();
-			System.err.println(userAttributes);
+
 			String email = (String) userAttributes.get("email");
 			String name = (String) userAttributes.get("name");
-
+			String roles = "";
+			Client account = null;
 			try {
-				account = clientService.findUserClient(email);
-				if (account == null) {
+
+				if (checkExitAccount(email)) {
+					System.err.println("Ton Tai account: " + email);
+					account = clientService.findUserClient(email);
 					if (userAttributes.get("id") == null) {
-						clientService.registerNewClientAfterOAuthLoginSuccess(email, name,
-								AuthenticationProvider.google);
-					}
-					else {
-						clientService.registerNewClientAfterOAuthLoginSuccess(email, name,
-								AuthenticationProvider.facebook);
-					}
-				} else {
-					if (userAttributes.get("id") == null) {
-						clientService.updateExitClientAfterOAthLoginSuccess(account, name,
+						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(account,
 								AuthenticationProvider.google);
 					} else {
-						clientService.updateExitClientAfterOAthLoginSuccess(account, name,
+						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(account,
 								AuthenticationProvider.facebook);
 					}
 				}
-				session.setAttribute("name", name);
+
+				if (!checkExitAccount(email)) {
+					System.err.println("Khong Ton Tai account: " + email);
+					clientService.registerNewClientAfterOAuthLoginSuccess(email, name);
+					account = clientService.findUserClient(email);
+					roles = "ROLE_USERL";
+					roleService.createRoleFor(account, roles);
+					if (userAttributes.get("id") == null) {
+						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(account,
+								AuthenticationProvider.google);
+					} else {
+						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(account,
+								AuthenticationProvider.facebook);
+					}
+				}
+
+				session.setAttribute("fullName", name);
 				session.setMaxInactiveInterval(24 * 60 * 60);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return "index";
+	}
+
+	public boolean checkExitAccount(String email) {
+		List<Client> listClient = clientService.findAll();
+		for (Client c : listClient) {
+			if (c.getUserEmail().equals(email)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

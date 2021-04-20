@@ -45,17 +45,27 @@
 								id="exampleInputPassword1" name="txtPassword">
 						</div>
 						<div class="checkbox">
-							<label> <input type="checkbox"> Remember Me
-							</label> <label class="pull-right"> <a href="/forgetpassword">Forgotten
-									Password?</a>
-							</label>
-
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox" name="remember-me">
+								</div>
+								<div class="col-lg-6 col-md-6">
+									<label> Remember Me </label>
+								</div>
+								<div class="col-lg-5 col-md-5">
+									<label class="pull-right"> <a href="/forgetpassword">Forgotten
+											Password?</a>
+									</label>
+								</div>
+							</div>
 						</div>
+
 						<button type="submit"
-							class="btn btn-success btn-flat m-b-30 m-t-30 btn-login">Sign in</button>
-						<fb:login-button scope="public_profile,email"
-							onlogin="checkLoginState();">
-						</fb:login-button>
+							class="btn btn-success btn-flat m-b-30 m-t-30 btn-login">Sign
+							in</button>
+						<!-- 						<fb:login-button scope="public_profile,email" -->
+						<!-- 							onlogin="checkLoginState();"> -->
+						<!-- 						</fb:login-button> -->
 						<div class="social-login-content">
 							<div class="social-button">
 								<!-- 								<a href="/oauth2/authorize-client/facebook">  -->
@@ -75,7 +85,7 @@
 						</div>
 						<div class="register-link m-t-15 text-center">
 							<p>
-								Don't have account ? <a href="/regester"> Sign Up Here</a>
+								Don't have account ? <a href="/register"> Sign Up Here</a>
 							</p>
 						</div>
 					</form>

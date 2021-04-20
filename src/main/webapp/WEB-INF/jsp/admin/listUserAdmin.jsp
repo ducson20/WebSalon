@@ -10,11 +10,13 @@
 </head>
 <body>
 	<!-- Left Panel -->
-	<%@include file="/WEB-INF/jsp/common-admin/aside.jsp"%>
+	<%@include file="/WEB-INF/jsp/common-admin/assets.jsp"%>
 	<!-- Right Panel -->
 	<div id="right-panel" class="right-panel">
 		<!-- Header-->
 		<%@include file="/WEB-INF/jsp/common-admin/header.jsp"%>
+		<%@ include file="/WEB-INF/jsp/common-admin/breadcrumbs.jsp"%>
+
 		<!-- /header -->
 		<div class="content mt-3">
 			<div class="animated fadeIn">
@@ -27,6 +29,7 @@
 									<tr>
 										<th>User Email</th>
 										<th>Full Name</th>
+										<th>Gender</th>
 										<th>Phone</th>
 										<th>Role</th>
 										<th></th>
@@ -38,8 +41,6 @@
 												${listUserRole.clients.lastName}</td>
 											<td>${listUserRole.clients.gender}</td>
 											<td>${listUserRole.clients.phone}</td>
-
-
 											<c:choose>
 												<c:when test="${listUserRole.roles.roleId == 'AD'}">
 													<td style="color: pink; font-weight: bold;">
@@ -50,7 +51,7 @@
 													<td style="color: blue;">User</td>
 												</c:otherwise>
 											</c:choose>
-
+										
 											<td><a
 												href="/admin/usermanager?userid=${listUserRole.userRoleId}"
 												style="color: white;">

@@ -30,25 +30,41 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "services_details", schema = "dbo", catalog = "SalonNails")
 public class ServiceDetail implements java.io.Serializable {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "serviceDetailID", unique = true, nullable = false)
 	private int serviceDetailId;
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "serviceID", nullable = false)
 	private Services services;
+	@Column(name = "title", nullable = false, length = 150)
 	private String title;
+	@Column(name = "descripttion", nullable = false, length = 500)
 	private String descripttion;
+	@Column(name = "price", nullable = false, precision = 53, scale = 0)
 	private double price;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "createdAt", length = 10)
 	private Date createdAt;
+	@Column(name = "timeToComplete", nullable = false, length = 50)
 	private String timeToComplete;
+	@Column(name = "sale", precision = 53, scale = 0)
 	private double sale;
+	@Column(name = "mainImage", nullable = true, length = 1000)
 	private String mainImage;
+	@Column(name = "content", nullable = false, length = 1000)
 	private String content;
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "servicesDetails")
 	private Set<ImageService> imageServiceses = new HashSet<ImageService>(0);
 
 	public ServiceDetail() {
 
 	}
 
-	public ServiceDetail(Services services, String title, String descripttion, String content, double price, String timeToComplete,
-			double sale, String mainImage) {
+	public ServiceDetail(Services services, String title, String descripttion, String content, double price,
+			String timeToComplete, double sale, String mainImage) {
 		super();
 		this.services = services;
 		this.title = title;
@@ -60,8 +76,21 @@ public class ServiceDetail implements java.io.Serializable {
 		this.content = content;
 	}
 
-	public ServiceDetail(int serviceDetailId, Services services, String title, String descripttion, String content, double price,
-			String timeToComplete, double sale, String mainImage) {
+	public ServiceDetail(Services services, String title, String descripttion, String content, double price,
+			String timeToComplete, double sale) {
+		super();
+		this.services = services;
+		this.title = title;
+		this.descripttion = descripttion;
+		this.price = price;
+		this.timeToComplete = timeToComplete;
+		this.sale = sale;
+		this.mainImage = mainImage;
+		this.content = content;
+	}
+	
+	public ServiceDetail(int serviceDetailId, Services services, String title, String descripttion, String content,
+			double price, String timeToComplete, double sale, String mainImage) {
 		super();
 		this.serviceDetailId = serviceDetailId;
 		this.services = services;
@@ -74,9 +103,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.content = content;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "serviceDetailID", unique = true, nullable = false)
 	public int getServiceDetailId() {
 		return this.serviceDetailId;
 	}
@@ -85,8 +111,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.serviceDetailId = serviceDetailId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "serviceID", nullable = false)
 	public Services getServices() {
 		return this.services;
 	}
@@ -95,7 +119,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.services = services;
 	}
 
-	@Column(name = "title", nullable = false, length = 150)
 	public String getTitle() {
 		return this.title;
 	}
@@ -104,7 +127,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.title = title;
 	}
 
-	@Column(name = "descripttion", nullable = false, length = 500)
 	public String getDescripttion() {
 		return this.descripttion;
 	}
@@ -113,7 +135,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.descripttion = descripttion;
 	}
 
-	@Column(name = "price", nullable = false, precision = 53, scale = 0)
 	public double getPrice() {
 		return this.price;
 	}
@@ -122,8 +143,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.price = price;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "createdAt", length = 10)
 	public Date getCreatedAt() {
 		return this.createdAt;
 	}
@@ -132,7 +151,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.createdAt = createdAt;
 	}
 
-	@Column(name = "timeToComplete", nullable = false, length = 50)
 	public String getTimeToComplete() {
 		return this.timeToComplete;
 	}
@@ -141,7 +159,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.timeToComplete = timeToComplete;
 	}
 
-	@Column(name = "sale", precision = 53, scale = 0)
 	public Double getSale() {
 		return this.sale;
 	}
@@ -150,7 +167,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.sale = sale;
 	}
 
-	@Column(name = "mainImage", nullable = false, length = 1000)
 	public String getMainImage() {
 		return this.mainImage;
 	}
@@ -159,7 +175,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.mainImage = mainImage;
 	}
 
-	@Column(name = "content", nullable = false, length = 1000)
 	public String getContent() {
 		return this.content;
 	}
@@ -168,7 +183,6 @@ public class ServiceDetail implements java.io.Serializable {
 		this.content = content;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "servicesDetails")
 	public Set<ImageService> getImageServiceses() {
 		return this.imageServiceses;
 	}
@@ -176,5 +190,12 @@ public class ServiceDetail implements java.io.Serializable {
 	public void setImageServiceses(Set<ImageService> imageServiceses) {
 		this.imageServiceses = imageServiceses;
 	}
+
+	@Override
+	public String toString() {
+		return title;
+	}
+	
+	
 
 }

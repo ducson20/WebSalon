@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import web.salons.model.Appointment;
 import web.salons.model.Client;
 import web.salons.model.Employee;
+import web.salons.model.Salon;
+import web.salons.model.ServiceDetail;
 import web.salons.service.AppointmentService;
 import web.salons.service.ClientService;
 import web.salons.service.EmployeeService;
 import web.salons.service.SalonService;
+import web.salons.service.ServiceDetailSerivce;
 
 @RestController
 public class RESTController {
@@ -40,6 +44,9 @@ public class RESTController {
 
 	@Autowired
 	private ClientService clientService;
+
+	@Autowired
+	private ServiceDetailSerivce serviceDetailSerivce;
 
 	private String message = "";
 
@@ -144,7 +151,7 @@ public class RESTController {
 		return listObject;
 	}
 
-	@GetMapping(value = "/loaduserfullname")
+	@RequestMapping(value = "/loaduserfullname", method = RequestMethod.GET)
 	public String loadFullName(ModelMap model, Principal principal, HttpSession session) {
 		String loginName = "";
 		if (principal != null) {
@@ -177,4 +184,95 @@ public class RESTController {
 //
 //	}
 
+//	@RequestMapping(value = "/loadAddressByCity", method = RequestMethod.GET)
+//	public List<Salon> loadAddressByCity(ModelMap model, @RequestParam(value = "cityid") String city) {
+//		List<Salon> listAddressByCity = null;
+//		try {
+//
+//			listAddressByCity = salonService.findSalonByCityID(city);
+//
+//		} catch (Exception e) {
+//			message = "SOMETHING WRONG";
+//			System.err.println(message);
+//			model.addAttribute("message", message);
+//			e.printStackTrace();
+//		}
+//		return listAddressByCity;
+//	}
+
+	@RequestMapping(value = "/loadAddressByCity", method = RequestMethod.GET)
+	public List<Salon> loadAddressByCityy(ModelMap model, @RequestParam(value = "city") String city) {
+		List<Salon> listAddressByCity = null;
+		try {
+
+			listAddressByCity = salonService.findSalonByCity(city);
+			
+		} catch (Exception e) {
+			message = "SOMETHING WRONG";
+			System.err.println(message);
+			model.addAttribute("message", message);
+			e.printStackTrace();
+		}
+		return listAddressByCity;
+	}
+
+	@RequestMapping(value = "/loadAddressByWard", method = RequestMethod.GET)
+	public List<Salon> loadAddressByWard(ModelMap model, @RequestParam(value = "ward") String wardID) {
+		List<Salon> listAddressByWard = null;
+		try {
+
+			listAddressByWard = salonService.findSalonByWard(wardID);
+
+		} catch (Exception e) {
+			message = "SOMETHING WRONG";
+			System.err.println(message);
+			model.addAttribute("message", message);
+			e.printStackTrace();
+		}
+
+		return listAddressByWard;
+	}
+
+	@RequestMapping(value = "checkExitTitle", method = RequestMethod.GET)
+	public List<ServiceDetail> checkExitTitle(ModelMap model) {
+		List<ServiceDetail> listServiceDetail = null;
+		try {
+			listServiceDetail = serviceDetailSerivce.findAll();
+		} catch (Exception e) {
+			message = "SOMETHING WRONG";
+			System.err.println(message);
+			model.addAttribute("message", message);
+			e.printStackTrace();
+		}
+
+		return listServiceDetail;
+	}
+	
+	@RequestMapping(value = "countCity", method = RequestMethod.GET)
+	public List<String[]> countCity(ModelMap model) {
+		List<String[]> countCity = null;
+		try {
+			countCity = salonService.countSalonByCity();
+		} catch (Exception e) {
+			message = "SOMETHING WRONG";
+			System.err.println(message);
+			model.addAttribute("message", message);
+			e.printStackTrace();
+		}
+
+		return countCity;
+	}
+
+	@RequestMapping(value = "convertListServiceOfAppointment", method = RequestMethod.GET)
+	public String convertListServiceOfAppointment(@RequestParam(value = "appointment-id") int appointmentID) {
+		Appointment app = null;
+		String listService = "";
+		try {
+			app = appointmentService.findAppointmentByID(appointmentID);
+			listService = app.getListServices();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listService;
+	}
 }

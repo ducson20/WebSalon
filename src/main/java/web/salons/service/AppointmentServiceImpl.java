@@ -9,7 +9,7 @@ import web.salons.model.Appointment;
 import web.salons.repository.AppointmentRepository;
 
 @Service
-public class AppointmentServiceImpl implements AppointmentService{
+public class AppointmentServiceImpl implements AppointmentService {
 
 	@Autowired
 	private AppointmentRepository appointmentRepository;
@@ -20,10 +20,15 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 
 	@Override
+	public Appointment findAppointmentByID(int appointmentID) {
+		return appointmentRepository.findAppointmentByID(appointmentID);
+	}
+
+	@Override
 	public List<Appointment> findAppointmentByEmployeeID(int employeeID) {
 		return appointmentRepository.findAppointmentByEmployeeID(employeeID);
 	}
-	
+
 	@Override
 	public List<String> findAppointmentTimeBooked(String dateBooked) {
 		return appointmentRepository.findAppointmentTimeBooked(dateBooked);
@@ -34,7 +39,4 @@ public class AppointmentServiceImpl implements AppointmentService{
 		return appointmentRepository.findAppointmentTimeBookedByEmployeeID(employeeID, dateBooked);
 	}
 
-	
-	
-	
 }

@@ -34,21 +34,24 @@ public class ClientServiceImpl implements ClientService{
 
 
 	@Override
-	public void registerNewClientAfterOAuthLoginSuccess(String email, String name, AuthenticationProvider authProvider) {
+	public void registerNewClientAfterOAuthLoginSuccess(String email, String name) {
 		Client client = new Client();
 		client.setUserEmail(email);
 		client.setFirstName(name);
-//		client.setEnable(true);
-//		client.setCreatedTime(new Date());
-		client.setAuthProvider(authProvider);
 		clientRepository.save(client);
 	}
 
 
 	@Override
-	public void updateExitClientAfterOAthLoginSuccess(Client client, String name, AuthenticationProvider authProvider ) {
-		client.setFirstName(name);
+	public void updateExitClientAfterOAuthLoginSuccess(Client client, String name, AuthenticationProvider authProvider ) {
+		client.setLastName(name);
 		client.setAuthProvider(authProvider);
+		clientRepository.save(client);
+	}
+	
+	@Override
+	public void updateExitClientAfterOAuthLoginSuccessHasRole(Client client, AuthenticationProvider uthProvider) {
+		client.setAuthProvider(uthProvider);
 		clientRepository.save(client);
 	}
 
@@ -57,9 +60,6 @@ public class ClientServiceImpl implements ClientService{
 	public Boolean existsByUserEmail(String email) {
 		return clientRepository.existsByUserEmail(email);
 	}
-
-	
-	
 
 	
 }

@@ -27,10 +27,6 @@ public class ImageService implements java.io.Serializable {
 	@JoinColumn(name = "serviceDetailID", nullable = true)
 	private ServiceDetail servicesDetails;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "serviceID", nullable = false)
-	private Services services;
-
 	@Column(name = "linkImage", nullable = false, length = 500)
 	private String linkImage;
 
@@ -59,13 +55,6 @@ public class ImageService implements java.io.Serializable {
 		this.servicesDetails = servicesDetails;
 	}
 
-	public Services getServices() {
-		return services;
-	}
-
-	public void setServices(Services services) {
-		this.services = services;
-	}
 
 	public String getLinkImage() {
 		return this.linkImage;

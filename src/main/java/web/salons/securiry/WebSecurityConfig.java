@@ -34,16 +34,32 @@ import web.salons.service.UserDetailsServiceImpl;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter { // (Kế thừa bảo mật web)
+
 	@Autowired
 	private UserDetailsServiceImpl userDetails;
 
 	@Autowired
-	private Environment env;
+	private ClientOAuth2UserService oAuth2UserService;
+
+	@Autowired
+	private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		return bCryptPasswordEncoder;
+	}
+
+	@Bean
+	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
+
+		return new HttpSessionOAuth2AuthorizationRequestRepository();
+	}
+
+	@Bean
+	public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
+
+		return new NimbusAuthorizationCodeTokenResponseClient();
 	}
 
 	@Autowired
@@ -61,12 +77,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { // (Kế t
 			http.csrf().disable();
 
 			// Các trang không yêu cầu login
-			http.authorizeRequests().antMatchers("/SalonsWeb/src/main/resources/static", "/", "/login", "/register",
-					"services", "gallery", "contact", "aboutUS", "/booking").permitAll();
+			http.authorizeRequests().antMatchers("/resources/**", "/", "/login", "/register",
+					"/oauth2/**", "services", "gallery", "contact", "aboutUS", "/booking").permitAll();
 
 			// Trang /userInfo yêu cầu phải login với vai trò ROLE_USER hoặc ROLE_ADMIN.
 			// Nếu chưa login, nó sẽ redirect tới trang /login.
-			http.authorizeRequests().antMatchers("/user/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
+			http.authorizeRequests().antMatchers("/user/**")
+					.access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
 			// Trang chỉ dành cho ADMIN
 			http.authorizeRequests().antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')");
@@ -78,8 +95,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { // (Kế t
 
 			// Cấu hình cho Login Form.
 
-			http.authorizeRequests().antMatchers("/", "/login", "/oauth/**").permitAll().and().formLogin()
-					.loginProcessingUrl("/mapActionLogin").loginPage("/login").defaultSuccessUrl("/")
+			http.authorizeRequests().and()
+					.formLogin().loginProcessingUrl("/mapActionLogin").loginPage("/login").defaultSuccessUrl("/")
 					.failureUrl("/login?error=true").usernameParameter("txtUserEmail").passwordParameter("txtPassword")
 					.and().oauth2Login().loginPage("/login").defaultSuccessUrl("/loginSuccess")
 					.failureUrl("/login?error=true").authorizationEndpoint().baseUri("/oauth2/authorize-client")
@@ -93,7 +110,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { // (Kế t
 //					.and()
 //					.successHandler(oAuth2LoginSuccessHandler);
 
-			http.logout().logoutSuccessUrl("/login").invalidateHttpSession(true).deleteCookies("JSESSIONID");
+			http.logout().logoutSuccessUrl("/login").invalidateHttpSession(true).deleteCookies("JSESSIONID")
+			.and().rememberMe().key("asdfghjklqwertyuio_1234567890").tokenValiditySeconds(7 * 24 * 60 * 60);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -105,27 +123,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { // (Kế t
 
 	}
 
-	@Bean
-	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
-
-		return new HttpSessionOAuth2AuthorizationRequestRepository();
-	}
-
-	@Bean
-	public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
-
-		return new NimbusAuthorizationCodeTokenResponseClient();
-	}
-
 	@Override
 	public UserDetailsService userDetailsService() {
 		return userDetails;
 	}
-
-	@Autowired
-	private ClientOAuth2UserService oAuth2UserService;
-
-	@Autowired
-	private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
 }

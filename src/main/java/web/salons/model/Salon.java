@@ -32,8 +32,8 @@ public class Salon implements java.io.Serializable {
 	private int salonId;
 	@Column(name = "salonName", nullable = false, length = 50)
 	private String salonName;
-	@Column(name = "address", nullable = false, length = 50)
-	private String address;
+	@Column(name = "roadAndNumber", nullable = false, length = 50)
+	private String roadAndNumber;
 	@Temporal(TemporalType.TIME)
 	@Column(name = "timeStart", nullable = false, length = 16)
 	private Date timeStart;
@@ -43,42 +43,71 @@ public class Salon implements java.io.Serializable {
 	@Column(name = "timeOfSalon", nullable = false, length = 1000)
 	private String timeOfSalon;
 	@Column(name = "phone", nullable = false, length = 50)
-	private String phone;	
+	private String phone;
 	@Column(name = "city", nullable = false, length = 50)
 	private String city;
-	
+	@Column(name = "ward", nullable = false, length = 50)
+	private String ward;
+	@Column(name = "imageSalon")
+	private String imageSalon;
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salons")
 	private Set<Appointment> appointmentses = new HashSet<Appointment>(0);
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "salons")
 	private Set<Employee> employees = new HashSet<>();
-	
+
 	public Salon() {
-		
+
 	}
-	
+
 	public Salon(int salonId) {
 		super();
 		this.salonId = salonId;
 	}
 
-
-
-	public Salon(String salonName, String address, String city, Date timeStart, Date timeEnd, String timeOfSalon, String phone) {
+	public Salon(int salonId, String salonName, String roadAndNumber, Date timeStart, Date timeEnd, String timeOfSalon,
+			String phone, String city, String ward, String imageSalon) {
 		super();
+		this.salonId = salonId;
 		this.salonName = salonName;
-		this.address = address;
-		this.city = city;
+		this.roadAndNumber = roadAndNumber;
 		this.timeStart = timeStart;
 		this.timeEnd = timeEnd;
 		this.timeOfSalon = timeOfSalon;
 		this.phone = phone;
+		this.city = city;
+		this.ward = ward;
+		this.imageSalon = imageSalon;
 	}
 
+	public Salon(String salonName, String roadAndNumber, Date timeStart, Date timeEnd, String timeOfSalon, String phone,
+			String city, String ward) {
+		super();
+		this.salonName = salonName;
+		this.roadAndNumber = roadAndNumber;
+		this.timeStart = timeStart;
+		this.timeEnd = timeEnd;
+		this.timeOfSalon = timeOfSalon;
+		this.phone = phone;
+		this.city = city;
+		this.ward = ward;
+	}
 
+	public Salon(String salonName, String roadAndNumber, Date timeStart, Date timeEnd, String timeOfSalon, String phone,
+			String city, String ward, String imageSalon) {
+		super();
+		this.salonName = salonName;
+		this.roadAndNumber = roadAndNumber;
+		this.timeStart = timeStart;
+		this.timeEnd = timeEnd;
+		this.timeOfSalon = timeOfSalon;
+		this.phone = phone;
+		this.city = city;
+		this.ward = ward;
+		this.imageSalon = imageSalon;
+	}
 
-	
 	public int getSalonId() {
 		return this.salonId;
 	}
@@ -87,7 +116,6 @@ public class Salon implements java.io.Serializable {
 		this.salonId = salonId;
 	}
 
-	
 	public String getSalonName() {
 		return this.salonName;
 	}
@@ -96,16 +124,14 @@ public class Salon implements java.io.Serializable {
 		this.salonName = salonName;
 	}
 
-	
-	public String getAddress() {
-		return this.address;
+	public String getRoadAndNumber() {
+		return roadAndNumber;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setRoadAndNumber(String roadAndNumber) {
+		this.roadAndNumber = roadAndNumber;
 	}
 
-	
 	public Date getTimeStart() {
 		return this.timeStart;
 	}
@@ -114,7 +140,6 @@ public class Salon implements java.io.Serializable {
 		this.timeStart = timeStart;
 	}
 
-	
 	public Date getTimeEnd() {
 		return this.timeEnd;
 	}
@@ -123,7 +148,6 @@ public class Salon implements java.io.Serializable {
 		this.timeEnd = timeEnd;
 	}
 
-	
 	public String getTimeOfSalon() {
 		return this.timeOfSalon;
 	}
@@ -132,7 +156,6 @@ public class Salon implements java.io.Serializable {
 		this.timeOfSalon = timeOfSalon;
 	}
 
-	
 	public String getPhone() {
 		return this.phone;
 	}
@@ -140,14 +163,29 @@ public class Salon implements java.io.Serializable {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	
+
 	public String getCity() {
 		return city;
 	}
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public String getWard() {
+		return ward;
+	}
+
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+
+	public String getImageSalon() {
+		return imageSalon;
+	}
+
+	public void setImageSalon(String imageSalon) {
+		this.imageSalon = imageSalon;
 	}
 
 	public Set<Appointment> getAppointmentses() {
@@ -162,20 +200,13 @@ public class Salon implements java.io.Serializable {
 		return employees;
 	}
 
-
-
 	public void setEmployees(Set<Employee> employees) {
 		this.employees = employees;
 	}
-	
-	
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salons")
-//	public Set<SalonEmployee> getSalonsEmployeeses() {
-//		return this.salonsEmployeeses;
-//	}
-//
-//	public void setSalonsEmployeeses(Set<SalonEmployee> salonsEmployeeses) {
-//		this.salonsEmployeeses = salonsEmployeeses;
-//	}
+
+	@Override
+	public String toString() {
+		return salonName;
+	}
 
 }

@@ -9,10 +9,10 @@
 <%@ include file="/WEB-INF/jsp/common-admin/css.jsp"%>
 </head>
 <body>
-	<%@include file="/WEB-INF/jsp/common-admin/aside.jsp"%>
+	<%@include file="/WEB-INF/jsp/common-admin/assets.jsp"%>
 	<div id="right-panel" class="right-panel">
 		<%@include file="/WEB-INF/jsp/common-admin/header.jsp"%>
-
+		<%@ include file="/WEB-INF/jsp/common-admin/breadcrumbs.jsp"%>
 		<div class="content mt-3">
 			<ul class="nav nav-tabs">
 				<li class="nav-item"><a class="nav-link active"
@@ -110,7 +110,8 @@
 											<p class="text-center">
 												<a href="/admin/userdetails"><input type="button"
 													value="Cancel" class="btn btn-secondary" id="buttonCancel"></a>
-											<p>
+												<p>
+										
 										</div>
 									</div>
 								</div>
@@ -123,6 +124,7 @@
 		</div>
 	</div>
 
-	<%@include file="/WEB-INF/jsp/common-admin/script.jsp"%>
-</body>
+
+	<%@include file="/WEB-INF/jsp/common-admin/script.jsp"%></
+											body>
 </html>

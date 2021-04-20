@@ -9,13 +9,14 @@ import org.springframework.stereotype.Repository;
 import web.salons.model.UserRole;
 
 @Repository
-public interface UserRoleRepository extends JpaRepository<UserRole, Integer>{
+public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
 
 	@Query("SELECT ur.roles.roleName FROM UserRole ur WHERE ur.clients.userEmail = ?1")
-	public List<String> getRoleName(String userEmail);
-	
+	List<String> getRoleName(String userEmail);
+
 	@Query("SELECT ur FROM UserRole ur WHERE ur.userRoleId  = ?1")
 	UserRole findUserRoleByID(Integer userRoleID);
-	
+
+	Boolean existsByClients(String email);
 
 }

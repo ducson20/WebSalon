@@ -62,13 +62,16 @@ public class UserAdminController {
 		String message = "SOMETHING WRONG";
 		UserRole user = null;
 		try {
+
 			user = userRoleService.findUserRoleByID(userID);
 			user.setRoles(roleService.findRoleByRoleName("ROLE_USER"));
 			userRoleService.save(user);
 			message = "REMOVE ROLE SUCCESS";
 			model.addAttribute("message", message);
 			return "redirect:/admin/usermanager?userid=" + userID;
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 		}
 		model.addAttribute("message", message);
