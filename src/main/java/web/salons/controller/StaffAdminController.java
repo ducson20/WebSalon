@@ -32,13 +32,13 @@ import web.salons.service.ServiceeService;
 public class StaffAdminController {
 
 	@Autowired
-	public EmployeeService employeeService;
+	private EmployeeService employeeService;
 
 	@Autowired
-	public ServiceeService serviceeService;
+	private ServiceeService serviceeService;
 
 	@Autowired
-	public SalonService salonService;
+	private SalonService salonService;
 
 	private String message = "";
 
@@ -46,18 +46,11 @@ public class StaffAdminController {
 	public String createEmployeeGET(ModelMap model) {
 		List<Salon> listSalons = null;
 		try {
-
 			listSalons = salonService.findAll();
 
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "GET ALL SUCCESS";
-		System.err.println(message);
 		model.addAttribute("listSalons", listSalons);
 		return "admin/formStaff";
 	}
@@ -84,14 +77,9 @@ public class StaffAdminController {
 			s.getEmployees().add(emp);
 			employeeService.save(emp);
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "NEW EMPLOYEE SUCCESS";
-		System.err.println(message);
+		message = "INSERT STAFF SUCCESSFULLY";
 		model.addAttribute("message", message);
 		return "redirect:/admin/staffs";
 	}
@@ -99,7 +87,6 @@ public class StaffAdminController {
 	@RequestMapping(value = "/staff/edit", method = RequestMethod.GET)
 	public String editStaff(ModelMap model, @RequestParam(value = "staff-id") Integer staffID) {
 		SimpleDateFormat formater = new SimpleDateFormat("HH:mm");
-		;
 		List<Salon> listSalons = null;
 		Employee staff = null;
 		String lSalonNameByStaff = null;
@@ -109,16 +96,9 @@ public class StaffAdminController {
 			listSalons = salonService.findAll();
 			staff = employeeService.findEmployeeByEmpID(staffID);
 			lSalonNameByStaff = staff.getSalons().toString().replace("[", "").replace("]", "");
-
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "GET ALL SUCCES";
-		System.err.println(message);
 		model.addAttribute("listSalons", listSalons);
 		timeStart = formater.format(staff.getTimeStart());
 		model.addAttribute("timeStart", timeStart);
@@ -134,14 +114,9 @@ public class StaffAdminController {
 		try {
 			employeeService.deleteById(staffID);
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "DELETE SUCCESS";
-		System.err.println(message);
+		message = "DELETE STAFF SUCCESSFULLY";
 		model.addAttribute("message", message);
 		return "redirect:/admin/staffs";
 	}
@@ -164,16 +139,9 @@ public class StaffAdminController {
 			totalItems = page.getTotalElements();
 			totalPages = page.getTotalPages();
 			listStaffs = page.getContent();
-
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "GET ALL SUCCESS";
-		System.err.println(message);
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("totalItems", totalItems);

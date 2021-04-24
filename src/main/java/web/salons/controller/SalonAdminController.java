@@ -26,6 +26,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,7 +56,7 @@ public class SalonAdminController {
 	}
 
 	@RequestMapping(value = "/new/salon", method = RequestMethod.POST)
-	public String createSalonPost(ModelMap model, @RequestParam(value = "primaryImage") MultipartFile mainMultipartFile,
+	public String createSalonPost(Model model, @RequestParam(value = "primaryImage") MultipartFile mainMultipartFile,
 			@RequestParam(value = "salonName") String salonName, @RequestParam(value = "roadAndNumber") String address,
 			@RequestParam(value = "city") String city, @RequestParam(value = "phone") String phone,
 			@RequestParam(value = "timeStart") String timeStart, @RequestParam(value = "timeEnd") String timeEnd,
@@ -87,8 +88,7 @@ public class SalonAdminController {
 					Files.copy(inputStream, path.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 				}
 			}
-			message = "UPDATE SALON SUCCESS";
-			System.err.println(message);
+			message = "UPDATE SALON SUCCESSFULLY";
 			model.addAttribute("message", message);
 		} else {
 			Salon salon = new Salon(salonName, address, timeStartFor, timeEndFor, timeOfSalon, phone, city, ward);
@@ -96,10 +96,6 @@ public class SalonAdminController {
 				salonHolderID = insertSalon(salon).getSalonId();
 			} catch (Exception e) {
 				e.printStackTrace();
-				message = "SOMETHING WRONG";
-				System.err.println(message);
-				model.addAttribute("message", message);
-				return "errorPage";
 			}
 			path = Paths.get("src/main/webapp/main-img/salon/" + salonHolderID + "/" + salonName + "/");
 			if (path != null) {
@@ -108,9 +104,6 @@ public class SalonAdminController {
 					salon = salonService.findSalonBySalonID(salonHolderID);
 				} catch (Exception e) {
 					e.printStackTrace();
-					message = "SOMETHING WRONG1";
-					System.err.println(message);
-					model.addAttribute("message", message);
 				}
 				salon.setImageSalon("main-img/salon/" + salonHolderID + "/" + salonName + "/" + fileName);
 				salonService.save(salon);
@@ -120,8 +113,7 @@ public class SalonAdminController {
 					Files.copy(inputStream, path.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 				}
 			}
-			message = "INSERT SALON SUCCESS";
-			System.err.println(message);
+			message = "INSERT SALON SUCCESSFULLY";
 			model.addAttribute("message", message);
 		}
 
@@ -129,23 +121,16 @@ public class SalonAdminController {
 	}
 
 	@RequestMapping(value = "/salon/edit", method = RequestMethod.GET)
-	public String editServiceDetail(ModelMap model, @RequestParam(value = "salon-id") Integer salonID) {
+	public String editServiceDetail(Model model, @RequestParam(value = "salon-id") Integer salonID) {
 		
 		List<Salon> listSalons = null;
 		Salon salon = null;
-
 		try {
 			listSalons = salonService.findAll();
 			salon = salonService.findSalonBySalonID(salonID);
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
-			e.printStackTrace();
-			return "errorPage";
+			e.printStackTrace();	
 		}
-		message = "GET ALL SUCCES";
-		System.err.println(message);
 		model.addAttribute("listSalons", listSalons);
 		model.addAttribute("salon", salon);
 		return "admin/formSalon";
@@ -156,20 +141,15 @@ public class SalonAdminController {
 		try {
 			salonService.deleteById(salonID);
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "DELETE SUCCESS";
-		System.err.println(message);
+		message = "DELETE SALON SUCCESSFULLY";
 		model.addAttribute("message", message);
 		return "redirect:/admin/salons";
 	}
 
 	@RequestMapping(value = "/salons", method = RequestMethod.GET)
-	public String listSalonByPage(ModelMap model, @RequestParam(value = "page", required = false) Integer currentPage,
+	public String listSalonByPage(Model model, @RequestParam(value = "page", required = false) Integer currentPage,
 			@RequestParam(value = "keyword", required = false) String keyword) {
 		String message = "";
 		Page<Salon> page = null;
@@ -186,16 +166,9 @@ public class SalonAdminController {
 			totalItems = page.getTotalElements();
 			totalPages = page.getTotalPages();
 			listSalons = page.getContent();
-
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "GET ALL SUCCESS";
-		System.err.println(message);
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("totalItems", totalItems);

@@ -20,19 +20,17 @@ public class ImageService implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "imageServiceID", unique = true, nullable = false)
+	@Column(name = "imageServiceID", unique = true)
 	private int imageServiceId;
-
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "serviceDetailID", nullable = true)
+	@JoinColumn(name = "serviceDetailID")
 	private ServiceDetail servicesDetails;
-
-	@Column(name = "linkImage", nullable = false, length = 500)
+	@Column(name = "linkImage")
 	private String linkImage;
 
 	public ImageService() {
+
 	}
-	
 
 	public ImageService(ServiceDetail servicesDetails, String linkImage) {
 		this.servicesDetails = servicesDetails;
@@ -54,7 +52,6 @@ public class ImageService implements java.io.Serializable {
 	public void setServicesDetails(ServiceDetail servicesDetails) {
 		this.servicesDetails = servicesDetails;
 	}
-
 
 	public String getLinkImage() {
 		return this.linkImage;

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +16,7 @@
 	<!-- 	<div class="blue block"> -->
 	<section class="card-booking">
 		<h3 class="card-header">Appointment</h3>
-		<form id="regForm" action="/booking" method="POST">
+		<form:form id="regForm" action="/booking" method="POST">
 			<div id="myModal" class="modal" tabindex="-1" role="dialog">
 				<div class="modal-dialog" role="document" style="margin-top: 40px;">
 					<div class="modal-content">
@@ -385,7 +385,7 @@
 					</div>
 				</div>
 			</div>
-		</form>
+		</form:form>
 
 	</section>
 

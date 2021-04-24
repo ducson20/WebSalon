@@ -1,8 +1,10 @@
 package web.salons.securiry.oauth;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,7 +26,8 @@ import org.springframework.web.client.RestTemplate;
 
 import web.salons.model.AuthenticationProvider;
 import web.salons.model.Client;
-import web.salons.service.ClientService;
+import web.salons.model.Role;
+import web.salons.service.UserService;
 import web.salons.service.RoleService;
 import web.salons.service.UserRoleService;
 
@@ -38,10 +41,7 @@ public class LoginOAuth2Controller {
 	private OAuth2AuthorizedClientService authorizedClientService;
 
 	@Autowired
-	private ClientService clientService;
-
-	@Autowired
-	private UserRoleService userRoleService;
+	private UserService clientService;
 
 	@Autowired
 	private RoleService roleService;
@@ -67,18 +67,19 @@ public class LoginOAuth2Controller {
 
 			String email = (String) userAttributes.get("email");
 			String name = (String) userAttributes.get("name");
-			String roles = "";
-			Client account = null;
+			Set<Role> roles = new HashSet<>();
+			Role role = null;
+			Client user = null;
 			try {
 
 				if (checkExitAccount(email)) {
 					System.err.println("Ton Tai account: " + email);
-					account = clientService.findUserClient(email);
+					user = clientService.findUserClient(email);
 					if (userAttributes.get("id") == null) {
-						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(account,
+						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(user,
 								AuthenticationProvider.google);
 					} else {
-						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(account,
+						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(user,
 								AuthenticationProvider.facebook);
 					}
 				}
@@ -86,18 +87,19 @@ public class LoginOAuth2Controller {
 				if (!checkExitAccount(email)) {
 					System.err.println("Khong Ton Tai account: " + email);
 					clientService.registerNewClientAfterOAuthLoginSuccess(email, name);
-					account = clientService.findUserClient(email);
-					roles = "ROLE_USERL";
-					roleService.createRoleFor(account, roles);
+					user = clientService.findUserClient(email);
+					role = roleService.findRoleByID(1);
+					roles.add(role);
+					user.setRoles(roles);
 					if (userAttributes.get("id") == null) {
-						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(account,
+						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(user,
 								AuthenticationProvider.google);
 					} else {
-						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(account,
+						clientService.updateExitClientAfterOAuthLoginSuccessHasRole(user,
 								AuthenticationProvider.facebook);
 					}
 				}
-
+				model.addAttribute("email", email);
 				session.setAttribute("fullName", name);
 				session.setMaxInactiveInterval(24 * 60 * 60);
 			} catch (Exception e) {

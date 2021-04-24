@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,13 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.NamedNativeQuery;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -76,24 +71,25 @@ public class ServiceDetail implements java.io.Serializable {
 		this.content = content;
 	}
 
-	public ServiceDetail(Services services, String title, String descripttion, String content, double price,
+	public ServiceDetail(Services services, Date createdAt, String title, String descripttion, String content, double price,
 			String timeToComplete, double sale) {
 		super();
 		this.services = services;
 		this.title = title;
+		this.createdAt = createdAt;
 		this.descripttion = descripttion;
 		this.price = price;
 		this.timeToComplete = timeToComplete;
 		this.sale = sale;
-		this.mainImage = mainImage;
 		this.content = content;
 	}
 	
-	public ServiceDetail(int serviceDetailId, Services services, String title, String descripttion, String content,
+	public ServiceDetail(int serviceDetailId, Services services, Date createdAt, String title, String descripttion, String content,
 			double price, String timeToComplete, double sale, String mainImage) {
 		super();
 		this.serviceDetailId = serviceDetailId;
 		this.services = services;
+		this.createdAt = createdAt;
 		this.title = title;
 		this.descripttion = descripttion;
 		this.price = price;

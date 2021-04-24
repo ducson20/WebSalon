@@ -28,25 +28,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Salon implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "salonID", unique = true, nullable = false)
+	@Column(name = "salonID", unique = true)
 	private int salonId;
-	@Column(name = "salonName", nullable = false, length = 50)
+	@Column(name = "salonName")
 	private String salonName;
-	@Column(name = "roadAndNumber", nullable = false, length = 50)
+	@Column(name = "roadAndNumber")
 	private String roadAndNumber;
 	@Temporal(TemporalType.TIME)
-	@Column(name = "timeStart", nullable = false, length = 16)
+	@Column(name = "timeStart")
 	private Date timeStart;
 	@Temporal(TemporalType.TIME)
-	@Column(name = "timeEnd", nullable = false, length = 16)
+	@Column(name = "timeEnd")
 	private Date timeEnd;
-	@Column(name = "timeOfSalon", nullable = false, length = 1000)
+	@Column(name = "timeOfSalon")
 	private String timeOfSalon;
-	@Column(name = "phone", nullable = false, length = 50)
+	@Column(name = "phone")
 	private String phone;
-	@Column(name = "city", nullable = false, length = 50)
+	@Column(name = "city")
 	private String city;
-	@Column(name = "ward", nullable = false, length = 50)
+	@Column(name = "ward")
 	private String ward;
 	@Column(name = "imageSalon")
 	private String imageSalon;

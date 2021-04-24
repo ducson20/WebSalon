@@ -20,13 +20,6 @@ public class SalonUserController {
 	@Autowired
 	private SalonService salonService;
 
-	private String message = "";
-
-	@RequestMapping(value = "/addressSalon")
-	public String address() {
-		return "myAppointment";
-	}
-
 	@RequestMapping(value = "/address-salon/{city}", method = RequestMethod.GET)
 	public String handleGet(Model model, RedirectAttributes redirectAttrs, @PathVariable("city") String city) {
 		List<String[]> listCountSalon = null;
@@ -50,7 +43,6 @@ public class SalonUserController {
 				if (deAccent(o[0]).equals("Ha Noi")) {
 					address = o[0] + " " + "(" + o[1] + ")";
 				}
-
 			}
 			break;
 		case "hcm":

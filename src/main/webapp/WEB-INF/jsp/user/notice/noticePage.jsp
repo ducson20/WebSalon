@@ -16,25 +16,30 @@
 		<div class="text-center">
 			<c:choose>
 				<c:when test="${message != null}">
-					<%-- 					<c:if test="${message == 'REGISTER_SUCCESS' }"> --%>
-					<!-- 						<div class="alert alert-success" role="alert" -->
-					<!-- 							style="width: 800px; margin: 0 auto; margin-bottom: 30px; font-size: 25px">Registration -->
-					<!-- 							is successful.</div> -->
-					<%-- 					</c:if> --%>
-
-					<%-- 					<c:if test="${message == 'FORGET_SUCCESS' }"> --%>
-					<!-- 						<div class="alert alert-success" role="alert" -->
-					<!-- 							style="width: 700px; margin: 0 auto; margin-bottom: 30px; font-size: 25px">Please -->
-					<!-- 							check your email for the completion</div> -->
-					<%-- 					</c:if> --%>
-					<c:if test="${message == 'CHANGE_PASSWORD_SUCCESS' }">
+					<c:if test="${message == 'REGISTER ACCOUNT SUCCESSFULLY' }">
+						<div class="alert alert-success" role="alert"
+							style="width: 1000px; margin: 0 auto; margin-bottom: 30px; font-size: 25px; font-family: monospace;">Registration
+							is successful. Please check ${userEmail} to verify your account.</div>
+					</c:if>
+					<c:if test="${message == 'VERIFY ACCOUNT SUCCESSFULLY'}">
+						<div class="alert alert-success" role="alert"
+							style="width: 700px; margin: 0 auto; margin-bottom: 30px; font-size: 25px">Account ${userEmail} was active.</div>
+					</c:if>
+					<c:if
+						test="${message == 'SEND MAIL TO FORGET PASSWORD SUCCESSFULLY' }">
+						<div class="alert alert-success" role="alert"
+							style="width: 700px; margin: 0 auto; margin-bottom: 30px; font-size: 25px">Please
+							check your ${userEmail} for the completion.</div>
+					</c:if>
+					<c:if test="${message == 'CHANGE PASSWORD ACCOUNT SUCCESSFULLY'}">
 						<div class="alert alert-success" role="alert"
 							style="width: 700px; margin: 0 auto; margin-bottom: 30px; font-size: 25px">Password
-							changed now you can login</div>
+							changed now you can login with ${userEmail}.</div>
 					</c:if>
 
 
-					<c:if test="${message == 'WRONG' }">
+
+					<c:if test="${message == 'SOMETHINH WRONG' }">
 						<div class="alert alert-dange" role="alert"
 							style="width: 700px; margin: 0 auto; margin-bottom: 30px; font-size: 25px">Something
 							was wrong</div>

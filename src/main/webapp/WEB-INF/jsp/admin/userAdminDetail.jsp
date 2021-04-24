@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +38,7 @@
 											</div>
 											<div class="col-12 col-md-9">
 												<input type="text" class="form-control"
-													value="${user.clients.userEmail}" readonly>
+													value="${user.userEmail}" readonly>
 											</div>
 										</div>
 										<div class="row form-group">
@@ -46,8 +48,7 @@
 											</div>
 											<div class="col-12 col-md-9">
 												<input type="text" class="form-control"
-													value="${user.clients.lastName} ${user.clients.firstName}"
-													readonly>
+													value="${user.lastName} ${user.firstName}" readonly>
 											</div>
 										</div>
 										<div class="row form-group">
@@ -57,7 +58,7 @@
 											</div>
 											<div class="col-12 col-md-9">
 												<input type="text" class="form-control"
-													value="${user.clients.gender}" readonly>
+													value="${user.gender}" readonly>
 											</div>
 										</div>
 										<div class="row form-group">
@@ -67,7 +68,7 @@
 											</div>
 											<div class="col-12 col-md-9">
 												<input type="text" class="form-control"
-													value="${user.clients.phone}" readonly>
+													value="${user.phone}" readonly>
 											</div>
 										</div>
 										<div class="row form-group">
@@ -76,10 +77,9 @@
 													Role </label>
 											</div>
 											<c:choose>
-												<c:when test="${user.roles.roleId == 'AD' }">
-													<form action="/admin/removeroleadmin" method="POST">
-														<input type="hidden" name="userid"
-															value="${user.userRoleId}" />
+												<c:when test="${user.roles == '[ROLE_ADMIN]' }">
+													<form:form action="/admin/removeroleadmin" method="POST">
+														<input type="hidden" name="userid" value="${user.userId}" />
 														<div class="col-5 col-md-4">
 															<input type="text" class="form-control"
 																value="Administrator" readonly="readonly">
@@ -88,12 +88,11 @@
 															<input type="submit" class="btn btn-danger"
 																value="Cancel Admin Permissions">
 														</div>
-													</form>
+													</form:form>
 												</c:when>
 												<c:otherwise>
-													<form action="/admin/setroleadmin" method="POST">
-														<input type="hidden" name="userid"
-															value="${user.userRoleId}" />
+													<form:form action="/admin/setroleadmin" method="POST">
+														<input type="hidden" name="userid" value="${user.userId}" />
 														<div class="col-5 col-md-4">
 															<input type="text" class="form-control" value="User"
 																readonly="readonly">
@@ -102,7 +101,7 @@
 															<input type="submit" class="btn btn-primary"
 																value="Set Admin Permissions">
 														</div>
-													</form>
+													</form:form>
 												</c:otherwise>
 											</c:choose>
 										</div>
@@ -110,8 +109,7 @@
 											<p class="text-center">
 												<a href="/admin/userdetails"><input type="button"
 													value="Cancel" class="btn btn-secondary" id="buttonCancel"></a>
-												<p>
-										
+											<p>
 										</div>
 									</div>
 								</div>
@@ -125,6 +123,6 @@
 	</div>
 
 
-	<%@include file="/WEB-INF/jsp/common-admin/script.jsp"%></
-											body>
+	<%@include file="/WEB-INF/jsp/common-admin/script.jsp"%>
+</body>
 </html>

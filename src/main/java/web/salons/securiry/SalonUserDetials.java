@@ -1,4 +1,4 @@
-package web.salons.securiry1;
+package web.salons.securiry;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,58 +11,73 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import web.salons.model.Client;
 import web.salons.model.Role;
-import web.salons.model.UserRole;
 
-public class SalonUserDetails implements UserDetails {
+public class SalonUserDetials implements UserDetails {
 	
-	private static final long serialVersionUID = 1L;
 	private Client user;
 	
+	public SalonUserDetials(Client user) {
+		super();
+		this.user = user;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Set<UserRole> roles = user.getUsersRoleses();
+		Set<Role> roles = user.getRoles();
 		List<SimpleGrantedAuthority> authories = new ArrayList<>();
-		for(UserRole role : roles) {
-			
+		for(Role role : roles) {
+			authories.add(new SimpleGrantedAuthority(role.getRoleName()));
 		}
-		return null;
+		return authories;
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		if (user.isOTPRequired()) {
+			System.err.println("Password OTP");
+			return user.getOneTimePassword();
+		}
+		System.err.println("Password default");
+		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.user.getFirstName() + " " + this.user.getLastName();
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return user.isAccountNonLocked();
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return user.isEnabled();
 	}
+	
+	public String getUserEmail() {
+		return this.user.getUserEmail();
+	}
+	
+	public Client getUser() {
+		return this.user;
+	}
+	
+	public Integer getUserId() {
+		return this.user.getUserId();
+	}
+	
+	
 
 }

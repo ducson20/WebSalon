@@ -21,24 +21,41 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "appointments", schema = "dbo", catalog = "SalonNails")
 public class Appointment implements java.io.Serializable {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "appointmentID", unique = true)
 	private int appointmentId;
-	private Client clients;
-	private Employee employees;
-	private Salon salons;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "timeBooked")
 	private Date timeBooked;
+	@Column(name = "canceled")
 	private Boolean canceled;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "dateBooked")
 	private Date dateBooked;
+	@Column(name = "phone")
 	private String phone;
+	@Column(name = "listServices")
 	private String listServices;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userID")
+	private Client clients;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "employeeID")
+	private Employee employees;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "salonID")
+	private Salon salons;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "serviceID")
 	private Services services;
 
 	public Appointment() {
-		
+
 	}
-	
-	public Appointment(Salon salons, Date timeBooked, Boolean canceled,
-			Date dateBooked, String phone, String listServices) {
+
+	public Appointment(Salon salons, Date timeBooked, Boolean canceled, Date dateBooked, String phone,
+			String listServices) {
 		super();
 		this.salons = salons;
 		this.timeBooked = timeBooked;
@@ -60,8 +77,9 @@ public class Appointment implements java.io.Serializable {
 		this.phone = phone;
 		this.listServices = listServices;
 	}
-	public Appointment( Employee employees, Salon salons, Date timeBooked, Boolean canceled,
-			Date dateBooked, String phone, String listServices) {
+
+	public Appointment(Employee employees, Salon salons, Date timeBooked, Boolean canceled, Date dateBooked,
+			String phone, String listServices) {
 		super();
 		this.employees = employees;
 		this.salons = salons;
@@ -72,9 +90,6 @@ public class Appointment implements java.io.Serializable {
 		this.listServices = listServices;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "appointmentID", unique = true, nullable = false)
 	public int getAppointmentId() {
 		return this.appointmentId;
 	}
@@ -83,8 +98,6 @@ public class Appointment implements java.io.Serializable {
 		this.appointmentId = appointmentId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userEmail", nullable = true)
 	public Client getClients() {
 		return this.clients;
 	}
@@ -93,8 +106,6 @@ public class Appointment implements java.io.Serializable {
 		this.clients = clients;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "employeeID", nullable = true)
 	public Employee getEmployees() {
 		return this.employees;
 	}
@@ -103,8 +114,6 @@ public class Appointment implements java.io.Serializable {
 		this.employees = employees;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "salonID", nullable = false)
 	public Salon getSalons() {
 		return this.salons;
 	}
@@ -113,8 +122,6 @@ public class Appointment implements java.io.Serializable {
 		this.salons = salons;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "serviceID", nullable = true)
 	public Services getServices() {
 		return services;
 	}
@@ -123,8 +130,6 @@ public class Appointment implements java.io.Serializable {
 		this.services = services;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "timeBooked", nullable = false, length = 23)
 	public Date getTimeBooked() {
 		return this.timeBooked;
 	}
@@ -133,7 +138,6 @@ public class Appointment implements java.io.Serializable {
 		this.timeBooked = timeBooked;
 	}
 
-	@Column(name = "canceled")
 	public Boolean getCanceled() {
 		return this.canceled;
 	}
@@ -141,10 +145,7 @@ public class Appointment implements java.io.Serializable {
 	public void setCanceled(Boolean canceled) {
 		this.canceled = canceled;
 	}
-	
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "dateBooked", nullable = false, length = 23)
 	public Date getDateBooked() {
 		return this.dateBooked;
 	}
@@ -153,7 +154,6 @@ public class Appointment implements java.io.Serializable {
 		this.dateBooked = dateBooked;
 	}
 
-	@Column(name = "phone", nullable = false, length = 50)
 	public String getPhone() {
 		return this.phone;
 	}
@@ -161,8 +161,7 @@ public class Appointment implements java.io.Serializable {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	@Column(name = "listServices", nullable = true, length = 1000)
+
 	public String getListServices() {
 		return listServices;
 	}
@@ -170,7 +169,5 @@ public class Appointment implements java.io.Serializable {
 	public void setListServices(String listServices) {
 		this.listServices = listServices;
 	}
-	
-	
 
 }

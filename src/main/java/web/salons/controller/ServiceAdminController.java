@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ import web.salons.service.ServiceeService;
 @RequestMapping("admin")
 public class ServiceAdminController {
 
-	private final String INSERT_SQL = "INSERT INTO services_details(serviceID, title, descripttion, content, price, timeToComplete, sale, mainImage) values(:serviceID, :title, :descripttion, :content, :price, :timeToComplete, :sale, :mainImage)";
+	private final String INSERT_SQL = "INSERT INTO services_details(serviceID, createdAt, title, descripttion, content, price, timeToComplete, sale) values(:serviceID, :createdAt, :title, :descripttion, :content, :price, :timeToComplete, :sale)";
 
 	@Autowired
 	private ServiceeService serviceeService;
@@ -59,20 +60,11 @@ public class ServiceAdminController {
 		System.err.println(maxSizeImg);
 		List<Services> listServices = null;
 		try {
-
 			listServices = serviceeService.findAll();
 			model.addAttribute("listServices", listServices);
-
 		} catch (Exception e) {
 			e.printStackTrace();
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
-			return "errorPage";
 		}
-
-		message = "GET ALL SUCCESS";
-		System.err.println(message);
 		model.addAttribute("message", message);
 		return "admin/formServices";
 	}
@@ -96,14 +88,13 @@ public class ServiceAdminController {
 		String fileName1 = title + "_main.png";
 		String[] fileName2 = null;
 		if (serviceDetailSerivce.findServiceDetailBy(serviceDetailID) != null) {
-			System.err.println("Edit service detail");
 			path1 = Paths.get("src/main/webapp/main-img/service/" + serviceDetailID + "/" + title + "/");
 			path2 = Paths
 					.get("src/main/webapp/main-img/service/" + serviceDetailID + "/" + title + "/detail-img-service/");
 			if (path1 != null) {
 				Files.createDirectories(path1);
-				ServiceDetail serviceDetail = new ServiceDetail(serviceDetailID, serviceID, title, description, content,
-						price, timeToComplete, sale,
+				ServiceDetail serviceDetail = new ServiceDetail(serviceDetailID, serviceID, new Date(), title,
+						description, content, price, timeToComplete, sale,
 						"main-img/service/" + serviceDetailID + "/" + title + "/" + fileName1);
 				try {
 					serviceDetailSerivce.save(serviceDetail);
@@ -112,7 +103,7 @@ public class ServiceAdminController {
 					System.err.println(message);
 					model.addAttribute("message", message);
 					e.printStackTrace();
-					return "errorPage";
+					return "noticePage";
 				}
 				inputStream1 = mainMultipartFile.getInputStream();
 				inputStream2 = new InputStream[extraMultipartFiles.length];
@@ -143,24 +134,17 @@ public class ServiceAdminController {
 					}
 				}
 			}
-			message = "UPDATE SUCCESS";
-			System.err.println(message);
+			message = "UPDATE SERVICE DETAIL SUCCESSFULLY";
 			model.addAttribute("message", message);
 			return "redirect:/admin/servicedetails";
 
 		} else {
-			System.err.println("New service detail");
-
-			ServiceDetail serviceDetail = new ServiceDetail(serviceID, title, description, content, price,
+			ServiceDetail serviceDetail = new ServiceDetail(serviceID, new Date(), title, description, content, price,
 					timeToComplete, sale);
 			try {
 				serviceDetailHolderID = insertServiceDetail(serviceDetail).getServiceDetailId();
 			} catch (Exception e) {
-				message = "SOMETHING WRONG";
-				System.err.println(message);
-				model.addAttribute("message", message);
 				e.printStackTrace();
-				return "errorPage";
 			}
 			path1 = Paths.get("src/main/webapp/main-img/service/" + serviceDetailHolderID + "/" + title + "/");
 			if (path1 != null) {
@@ -172,7 +156,7 @@ public class ServiceAdminController {
 					System.err.println(message);
 					model.addAttribute("message", message);
 					ex.printStackTrace();
-					return "errorPage";
+					return "noticePage";
 				}
 				serviceDetail.setMainImage("main-img/service/" + serviceDetailHolderID + "/" + title + "/" + fileName1);
 				serviceDetailSerivce.save(serviceDetail);
@@ -203,7 +187,7 @@ public class ServiceAdminController {
 					}
 				}
 
-				message = "INSERT SUCCESS";
+				message = "INSERT SERVICE DETAIL SUCCESSFULLY";
 				model.addAttribute("message", message);
 				System.err.println(message);
 			}
@@ -219,24 +203,17 @@ public class ServiceAdminController {
 		List<ImageService> listImageServiceDetail = null;
 		String mainImage = "";
 		try {
-
 			listServices = serviceeService.findAll();
-
 			serviceDetail = serviceDetailSerivce.findServiceDetailBy(serviceDetailID);
-
 			serviceDetail.getMainImage();
-
 			listImageServiceDetail = imageServiceeService.findImageServiceByServiceDetailId(serviceDetailID);
-
 		} catch (Exception e) {
 			message = "SOMETHING WRONG";
 			System.err.println(message);
 			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
+			return "noticePage";
 		}
-		message = "GET ALL SUCCES";
-		System.err.println(message);
 		model.addAttribute("listServices", listServices);
 		model.addAttribute("serviceDetail", serviceDetail);
 		model.addAttribute("mainImage", mainImage);
@@ -252,13 +229,8 @@ public class ServiceAdminController {
 			listImgService = imageServiceeService.findImageServiceByServiceDetailId(serviceDetailID);
 			imageServiceeService.deleteAll(listImgService);
 			serviceDetailSerivce.deleteById(serviceDetailID);
-
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
 		message = "DELETE SUCCESS";
 		System.err.println(message);
@@ -270,7 +242,6 @@ public class ServiceAdminController {
 	public String listServiceDetailByPage(ModelMap model,
 			@RequestParam(value = "page", required = false) Integer currentPage,
 			@RequestParam(value = "keyword", required = false) String keyword) {
-		String message = "";
 		Page<ServiceDetail> page = null;
 		List<ServiceDetail> listServiceDetails = null;
 		List<Services> listServices = null;
@@ -286,16 +257,9 @@ public class ServiceAdminController {
 			totalItems = page.getTotalElements();
 			totalPages = page.getTotalPages();
 			listServiceDetails = page.getContent();
-
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "GET ALL SUCCESS";
-		System.err.println(message);
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("totalItems", totalItems);
@@ -309,10 +273,11 @@ public class ServiceAdminController {
 		KeyHolder holder = new GeneratedKeyHolder();
 		SqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("serviceID", serviceDetail.getServices().getServiceId())
-				.addValue("title", serviceDetail.getTitle()).addValue("descripttion", serviceDetail.getDescripttion())
+				.addValue("createdAt", serviceDetail.getCreatedAt()).addValue("title", serviceDetail.getTitle())
+				.addValue("descripttion", serviceDetail.getDescripttion())
 				.addValue("content", serviceDetail.getContent()).addValue("price", serviceDetail.getPrice())
-				.addValue("timeToComplete", serviceDetail.getTimeToComplete()).addValue("sale", serviceDetail.getSale())
-				.addValue("mainImage", serviceDetail.getMainImage());
+				.addValue("timeToComplete", serviceDetail.getTimeToComplete())
+				.addValue("sale", serviceDetail.getSale());
 		namedParameterJdbcTemplate.update(INSERT_SQL, parameters, holder);
 		serviceDetail.setServiceDetailId(holder.getKey().intValue());
 		return serviceDetail;

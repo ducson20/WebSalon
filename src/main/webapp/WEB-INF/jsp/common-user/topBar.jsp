@@ -2,6 +2,8 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Top Bar Start -->
@@ -31,19 +33,29 @@
 										Appointment</h2></a>
 							</div>
 							<div class="text">
-								<a href="/my-appointment"><h2>
+								<a id="my-appointment" href="/my-appointment"><h2>
 										<i class="fab fa-black-tie"></i> My Appointment
 									</h2></a>
 							</div>
 							<div class="text">
 								<a href="#dsadsaaa"><h2 id="LoginName">
-										<i class="fa fa-user"></i> ${fullName}
+										<i class="fa fa-user"></i>
+										${pageContext.request.userPrincipal.name}
 									</h2></a>
 							</div>
 							<div class="text">
-								<a href="/logout"><h2>
+								<c:url var="logout" value="/logout" />
+								<form:form action="${logout}" method="post" id="logout-form"
+									name="logoutForm">
+									<input type="hidden" name="${_csrf.parameterName}"
+										value="${_csrf.token}" />
+								</form:form>
+
+								<a href="" id="logout">
+									<h2>
 										<i class="fas fa-sign-out-alt"></i> Logout
-									</h2></a>
+									</h2>
+								</a>
 							</div>
 						</sec:authorize>
 
@@ -52,7 +64,11 @@
 								<a class="btn btn-warning" href="/booking"><h2>Make
 										Appointment</h2></a>
 							</div>
-
+							<div class="text">
+								<a id="my-appointment" href="/my-appointment"><h2>
+										<i class="fab fa-black-tie"></i> My Appointment
+									</h2></a>
+							</div>
 							<div class="text">
 								<a href="/admin/servicedetails"><h2>
 										<i class="fab fa-black-tie"></i> Admin
@@ -60,13 +76,23 @@
 							</div>
 							<div class="text">
 								<a href="#"><h2 id="LoginName">
-										<i class="fa fa-user"></i> ${fullName}
+										<i class="fa fa-user"></i>
+										${pageContext.request.userPrincipal.name}
 									</h2></a>
 							</div>
 							<div class="text">
-								<a href="/logout"><h2>
+								<c:url var="logout" value="/logout" />
+								<form:form action="${logout}" method="post" id="logout-form"
+									name="logoutForm">
+									<input type="hidden" name="${_csrf.parameterName}"
+										value="${_csrf.token}" />
+								</form:form>
+
+								<a href="" id="logout">
+									<h2>
 										<i class="fas fa-sign-out-alt"></i> Logout
-									</h2></a>
+									</h2>
+								</a>
 							</div>
 						</sec:authorize>
 					</sec:authorize>
@@ -117,8 +143,22 @@
 				method : "GET",
 				url : urlString
 			}).done(function(data) {
-				$("#LoginName").append(data);
+				console.log(data)
+				console.log(data[0])
+				console.log(data[1])
+				var urlMyAppointment = '/my-appointment/' + data[0];
+				// 				$('#my-appointment').attr('href', urlMyAppointment);
+				// 				$("#LoginName").append(data[1]);
 			})
 		})
 	</script>
+
 </c:if>
+<script>
+	$(document).ready(function() {
+		$('#logout').click(function(event) {
+			event.preventDefault();
+			$('#logout-form').submit();
+		})
+	})
+</script>

@@ -10,7 +10,7 @@
 <%@ include file="/WEB-INF/jsp/common-user/css.jsp"%>
 <link rel="stylesheet" href="/css/flickity.css" media="screen">
 </head>
-<body style="background: rgb(128, 128, 128, 0.1)">
+<body>
 	<%@ include file="/WEB-INF/jsp/common-user/topBar.jsp"%>
 	<%@ include file="/WEB-INF/jsp/common-user/navBar.jsp"%>
 	<!-- MY APPOINTMENT START -->

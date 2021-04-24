@@ -27,22 +27,13 @@ public class ServiceUserController {
 
 	@RequestMapping(value = "services/{id}", method = RequestMethod.GET)
 	public String listServiceDetailByService(ModelMap model, @PathVariable(value = "id") String serviceID) {
-
 		List<ServiceDetail> listServiceDetail = null;
-
 		try {
 			listServiceDetail = serviceDetailSerivce.findServiceDetailByServiceID(serviceID);
 			model.addAttribute("listServiceDetail", listServiceDetail);
-
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "GET ALL SUCCESS";
-		System.err.println(message);
 		model.addAttribute("message", message);
 		return "listServiceDetail";
 	}
@@ -51,24 +42,15 @@ public class ServiceUserController {
 	public String serviceName(ModelMap model, @PathVariable(value = "id") Integer serviceDetailID) {
 		ServiceDetail listServiceDetail = null;
 		List<ImageService> listImageServiceDetail = null;
-
 		try {
 			listServiceDetail = serviceDetailSerivce.findServiceDetailBy(serviceDetailID);
-			model.addAttribute("listServiceDetail", listServiceDetail);
-
 			listImageServiceDetail = imageServiceeService.findImageServiceByServiceDetailId(serviceDetailID);
-			model.addAttribute("listImageServiceDetail", listImageServiceDetail);
-			model.addAttribute("firstImageOfServiceDetail", listImageServiceDetail.toArray());
-
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
-		message = "GET ALL SUCCESS";
-		System.err.println(message);
+		model.addAttribute("listServiceDetail", listServiceDetail);
+		model.addAttribute("listImageServiceDetail", listImageServiceDetail);
+		model.addAttribute("firstImageOfServiceDetail", listImageServiceDetail.toArray());
 		model.addAttribute("message", message);
 		return "serviceDetail";
 	}
