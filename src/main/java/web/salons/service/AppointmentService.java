@@ -6,6 +6,8 @@ import web.salons.model.Appointment;
 
 public interface AppointmentService {
 
+	Appointment findAppointmentByID(int appointmentID);
+	
 	Appointment save(Appointment entity);
 	
 	List<Appointment> findAppointmentByEmployeeID(int employeeID);

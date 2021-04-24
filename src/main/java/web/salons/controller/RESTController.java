@@ -11,20 +11,26 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import web.salons.model.Appointment;
 import web.salons.model.Client;
 import web.salons.model.Employee;
+import web.salons.model.Salon;
+import web.salons.model.ServiceDetail;
+import web.salons.securiry.SalonUserDetials;
 import web.salons.service.AppointmentService;
-import web.salons.service.ClientService;
+import web.salons.service.UserService;
 import web.salons.service.EmployeeService;
 import web.salons.service.SalonService;
+import web.salons.service.ServiceDetailSerivce;
 
 @RestController
 public class RESTController {
@@ -39,7 +45,10 @@ public class RESTController {
 	private AppointmentService appointmentService;
 
 	@Autowired
-	private ClientService clientService;
+	private UserService clientService;
+
+	@Autowired
+	private ServiceDetailSerivce serviceDetailSerivce;
 
 	private String message = "";
 
@@ -55,37 +64,30 @@ public class RESTController {
 	}
 
 	@RequestMapping(value = "/listTimeOfSalonBySalon", method = RequestMethod.GET)
-	public String listTimeOfSalonBySalon(ModelMap model, @RequestParam(value = "salonid") int salonID) {
+	public String listTimeOfSalonBySalon(@RequestParam(value = "salonid") int salonID) {
 		String timeOfSalon = null;
 		try {
 			timeOfSalon = salonService.findTimeOfSalonByAddress(salonID);
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
-			return "errorPage";
 		}
 		return timeOfSalon;
 	}
 
 	@RequestMapping(value = "/listfullNameEmpBySalon", method = RequestMethod.GET, produces = "application/json")
-	public List<Employee> listfullNameEmpBySalon(ModelMap model, @RequestParam(value = "salonid") int salonID) {
+	public List<Employee> listfullNameEmpBySalon(@RequestParam(value = "salonid") int salonID) {
 
 		List<Employee> fullNameEmp = null;
 		try {
 			fullNameEmp = employeeService.findfullNameEmpBySalonID(salonID);
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
 		}
 		return fullNameEmp;
 	}
 
 	@RequestMapping(value = "/listTimeOfEmployeeSalonApp", method = RequestMethod.GET, produces = "application/json")
-	public List<Object> listTimeOfEmployeeSalonApp(ModelMap model, @RequestParam(value = "salonid") int salonID,
+	public List<Object> listTimeOfEmployeeSalonApp(@RequestParam(value = "salonid") int salonID,
 			@RequestParam(value = "employeeid") int employeeID,
 			@RequestParam("datebooked") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateBooked) {
 		List<Object> listObject = new ArrayList<Object>();
@@ -105,9 +107,6 @@ public class RESTController {
 			timeOfSalonBySalonID = salonService.findTimeOfSalonByAddress(salonID);
 			timeBookedApp = appointmentService.findAppointmentTimeBooked(date);
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
 		}
 		listObject.add(timeOfEmpByEmpID);
@@ -119,7 +118,7 @@ public class RESTController {
 	}
 
 	@RequestMapping(value = "/listTimeOfEmployeeSalonApp1", method = RequestMethod.GET, produces = "application/json")
-	public List<Object> listTimeOfEmployeeSalonApp1(ModelMap model, @RequestParam(value = "salonid") int salonID,
+	public List<Object> listTimeOfEmployeeSalonApp1(@RequestParam(value = "salonid") int salonID,
 			@RequestParam("datebooked") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateBooked) {
 		List<Object> listObject = new ArrayList<Object>();
 		String pattern = "yyyy-MM-dd";
@@ -133,9 +132,6 @@ public class RESTController {
 			timeBookedApp = appointmentService.findAppointmentTimeBooked(date);
 			timeOfSalonBySalonID = salonService.findTimeOfSalonByAddress(salonID);
 		} catch (Exception e) {
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
 			e.printStackTrace();
 		}
 		listObject.add(timeOfEmpBySalonID);
@@ -144,23 +140,21 @@ public class RESTController {
 		return listObject;
 	}
 
-	@GetMapping(value = "/loaduserfullname")
-	public String loadFullName(ModelMap model, Principal principal, HttpSession session) {
+	@RequestMapping(value = "/loaduserfullname", method = RequestMethod.GET)
+	public List<Object> loadFullName(Principal principal, HttpSession session, @AuthenticationPrincipal SalonUserDetials loggedUser) {
+
 		String loginName = "";
 		if (principal != null) {
-			User loginedUser = null;
+			List<Object> nameAndEmail = new ArrayList<Object>();
 			try {
-				loginedUser = (User) ((Authentication) principal).getPrincipal();
-				Client acc = clientService.findUserClient(loginedUser.getUsername());
+				Client acc = clientService.findUserClient(loggedUser.getUserEmail());
 				session.setAttribute("fullName", acc.getLastName());
 				session.setMaxInactiveInterval(24 * 60 * 60);
-
-				loginName = clientService.findUserClient(loginedUser.getUsername()).getLastName();
-				return loginName;
+				loginName = clientService.findUserClient(loggedUser.getUserEmail()).getLastName();
+				nameAndEmail.add(acc.getUserEmail());
+				nameAndEmail.add(loginName);
+				return nameAndEmail;
 			} catch (Exception e) {
-				message = "SOMETHING WRONG";
-				System.err.println(message);
-				model.addAttribute("message", message);
 				e.printStackTrace();
 			}
 		}
@@ -177,4 +171,76 @@ public class RESTController {
 //
 //	}
 
+//	@RequestMapping(value = "/loadAddressByCity", method = RequestMethod.GET)
+//	public List<Salon> loadAddressByCity(ModelMap model, @RequestParam(value = "cityid") String city) {
+//		List<Salon> listAddressByCity = null;
+//		try {
+//
+//			listAddressByCity = salonService.findSalonByCityID(city);
+//
+//		} catch (Exception e) {
+//			message = "SOMETHING WRONG";
+//			System.err.println(message);
+//			model.addAttribute("message", message);
+//			e.printStackTrace();
+//		}
+//		return listAddressByCity;
+//	}
+
+	@RequestMapping(value = "/loadAddressByCity", method = RequestMethod.GET)
+	public List<Salon> loadAddressByCityy(@RequestParam(value = "city") String city) {
+		List<Salon> listAddressByCity = null;
+		try {
+			listAddressByCity = salonService.findSalonByCity(city);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listAddressByCity;
+	}
+
+	@RequestMapping(value = "/loadAddressByWard", method = RequestMethod.GET)
+	public List<Salon> loadAddressByWard(@RequestParam(value = "ward") String wardID) {
+		List<Salon> listAddressByWard = null;
+		try {
+			listAddressByWard = salonService.findSalonByWard(wardID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listAddressByWard;
+	}
+
+	@RequestMapping(value = "checkExitTitle", method = RequestMethod.GET)
+	public List<ServiceDetail> checkExitTitle() {
+		List<ServiceDetail> listServiceDetail = null;
+		try {
+			listServiceDetail = serviceDetailSerivce.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listServiceDetail;
+	}
+
+	@RequestMapping(value = "countCity", method = RequestMethod.GET)
+	public List<String[]> countCity() {
+		List<String[]> countCity = null;
+		try {
+			countCity = salonService.countSalonByCity();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return countCity;
+	}
+
+	@RequestMapping(value = "convertListServiceOfAppointment", method = RequestMethod.GET)
+	public String convertListServiceOfAppointment(@RequestParam(value = "appointment-id") int appointmentID) {
+		Appointment app = null;
+		String listService = "";
+		try {
+			app = appointmentService.findAppointmentByID(appointmentID);
+			listService = app.getListServices();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listService;
+	}
 }

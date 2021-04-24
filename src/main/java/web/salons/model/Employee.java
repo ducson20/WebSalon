@@ -42,34 +42,32 @@ public class Employee implements java.io.Serializable {
 	@Temporal(TemporalType.TIME)
 	@Column(name = "timeEnd", nullable = false, length = 16)
 	private Date timeEnd;
-	@Column(name = "shift", nullable = false, length = 30)
+	@Column(name = "halfADay", nullable = false, length = 10)
+	private String halfADay;
+	@Column(name = "shift", nullable = false, length = 10)
 	private String shift;
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(name = "salons_employees",
-		joinColumns = { @JoinColumn(name = "employeeID")},
-		inverseJoinColumns = { @JoinColumn (name = "salonID")})
+	@JoinTable(name = "salons_employees", joinColumns = { @JoinColumn(name = "employeeID") }, inverseJoinColumns = {
+			@JoinColumn(name = "salonID") })
 	private Set<Salon> salons = new HashSet<>();
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employees")
 	private Set<Appointment> appointmentses = new HashSet<Appointment>(0);
 
 	public Employee() {
-		
+
 	}
 
+	public Employee(String fullName, String timeOfEmp, Date timeStart, Date timeEnd, String halfADay, String shift) {
 
-
-	public Employee( String fullName, String timeOfEmp, Date timeStart, Date timeEnd,
-			String shift) {
-		
 		this.fullName = fullName;
 		this.timeOfEmp = timeOfEmp;
 		this.timeStart = timeStart;
 		this.timeEnd = timeEnd;
+		this.halfADay = halfADay;
 		this.shift = shift;
 	}
-
 
 	public int getEmployeeId() {
 		return this.employeeId;
@@ -79,7 +77,6 @@ public class Employee implements java.io.Serializable {
 		this.employeeId = employeeId;
 	}
 
-	
 	public String getFullName() {
 		return this.fullName;
 	}
@@ -88,7 +85,6 @@ public class Employee implements java.io.Serializable {
 		this.fullName = fullName;
 	}
 
-	
 	public String getTimeOfEmp() {
 		return this.timeOfEmp;
 	}
@@ -97,7 +93,6 @@ public class Employee implements java.io.Serializable {
 		this.timeOfEmp = timeOfEmp;
 	}
 
-	
 	public Date getTimeStart() {
 		return this.timeStart;
 	}
@@ -106,7 +101,6 @@ public class Employee implements java.io.Serializable {
 		this.timeStart = timeStart;
 	}
 
-	
 	public Date getTimeEnd() {
 		return this.timeEnd;
 	}
@@ -115,24 +109,22 @@ public class Employee implements java.io.Serializable {
 		this.timeEnd = timeEnd;
 	}
 
-	
+	public String getHalfADay() {
+		return halfADay;
+	}
+
+	public void setHalfADay(String halfADay) {
+		this.halfADay = halfADay;
+	}
+
 	public String getShift() {
-		return this.shift;
+		return shift;
 	}
 
 	public void setShift(String shift) {
 		this.shift = shift;
 	}
 
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employees")
-//	public Set<SalonEmployee> getSalonsEmployeeses() {
-//		return this.salonsEmployeeses;
-//	}
-//
-//	public void setSalonsEmployeeses(Set<SalonEmployee> salonsEmployeeses) {
-//		this.salonsEmployeeses = salonsEmployeeses;
-//	}
-	
 	public Set<Appointment> getAppointmentses() {
 		return this.appointmentses;
 	}
@@ -147,6 +139,11 @@ public class Employee implements java.io.Serializable {
 
 	public void setAppointmentses(Set<Appointment> appointmentses) {
 		this.appointmentses = appointmentses;
+	}
+
+	@Override
+	public String toString() {
+		return salons.toString();
 	}
 
 }

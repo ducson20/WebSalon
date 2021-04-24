@@ -10,11 +10,13 @@
 </head>
 <body>
 	<!-- Left Panel -->
-	<%@include file="/WEB-INF/jsp/common-admin/aside.jsp"%>
+	<%@include file="/WEB-INF/jsp/common-admin/assets.jsp"%>
 	<!-- Right Panel -->
 	<div id="right-panel" class="right-panel">
 		<!-- Header-->
 		<%@include file="/WEB-INF/jsp/common-admin/header.jsp"%>
+		<%@ include file="/WEB-INF/jsp/common-admin/breadcrumbs.jsp"%>
+
 		<!-- /header -->
 		<div class="content mt-3">
 			<div class="animated fadeIn">
@@ -27,32 +29,29 @@
 									<tr>
 										<th>User Email</th>
 										<th>Full Name</th>
+										<th>Gender</th>
 										<th>Phone</th>
 										<th>Role</th>
+										<th>Enabled</th>
 										<th></th>
 									</tr>
-									<c:forEach var="listUserRole" items="${listUserRole}">
+									<c:forEach var="user" items="${listUsers}">
 										<tr>
-											<td>${listUserRole.clients.userEmail}</td>
-											<td>${listUserRole.clients.firstName}
-												${listUserRole.clients.lastName}</td>
-											<td>${listUserRole.clients.gender}</td>
-											<td>${listUserRole.clients.phone}</td>
-
-
+											<td>${user.userEmail}</td>
+											<td>${user.firstName}${user.lastName}</td>
+											<td>${user.gender}</td>
+											<td>${user.phone}</td>
 											<c:choose>
-												<c:when test="${listUserRole.roles.roleId == 'AD'}">
+												<c:when test="${user.roles == '[ROLE_ADMIN]'}">
 													<td style="color: pink; font-weight: bold;">
 														Administrator</td>
-
 												</c:when>
 												<c:otherwise>
 													<td style="color: blue;">User</td>
 												</c:otherwise>
 											</c:choose>
-
-											<td><a
-												href="/admin/usermanager?userid=${listUserRole.userRoleId}"
+											<td>${user.enabled}</td>
+											<td><a href="/admin/usermanager?userid=${user.userId}"
 												style="color: white;">
 													<button type="button" class="btn btn-danger btn-sm"
 														style="width: 80px">Detail</button>

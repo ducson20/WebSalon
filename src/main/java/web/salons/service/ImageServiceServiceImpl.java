@@ -19,6 +19,17 @@ public class ImageServiceServiceImpl implements ImageServiceeService{
 	public ImageService save(ImageService entity) {
 		return imageRepository.save(entity);
 	}
+	
+	@Override
+	public void deleteById(Integer id) {
+		imageRepository.deleteById(id);
+	}
+
+
+	@Override
+	public void deleteAll(List<ImageService> entities) {
+		imageRepository.deleteAll(entities);
+	}
 
 	@Override
 	public void insertImgServiceDetail(Integer serviceDetailID, String linkImage) {

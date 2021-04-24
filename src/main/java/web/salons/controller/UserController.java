@@ -1,18 +1,11 @@
 package web.salons.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ResolvableType;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -22,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.bytebuddy.utility.RandomString;
+import web.salons.model.AuthenticationProvider;
 import web.salons.model.Client;
+import web.salons.model.Role;
 import web.salons.securiry.EncrytedPasswordUtils;
 import web.salons.securiry.WebUtils;
-import web.salons.service.ClientService;
+import web.salons.service.UserService;
 import web.salons.service.RoleService;
 import web.salons.service.SendMailProcess;
 
@@ -41,26 +37,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class UserController {
 
 	@Autowired
-	private ClientService clientService;
+	private UserService clientService;
+
 
 	@Autowired
-	private RoleService roleService;
+	private SendMailProcess sendMail;
 
-	@Autowired
-	SendMailProcess sendMail;
+	private String message = "";
 
 	@RequestMapping(value = "/login")
-	public String login(ModelMap model, Principal principal,
-			@RequestParam(value = "error", defaultValue = "false") boolean loginError) {
+	public String login(Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-			try {
-				if (loginError) {
-					model.addAttribute("error", "ERROR");
-				}
-			} catch (Exception e) {
-			}
-
 			return "login";
 		}
 		return "redirect:/";
@@ -77,113 +65,123 @@ public class UserController {
 					+ "<br> You do not have permission to access this page!";
 			model.addAttribute("message", message);
 		}
-		return "403Page";
+		return "notice/403Page";
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public String register(ModelMap model) {
-		List<Client> listsAccount = clientService.findAll();
-		model.addAttribute("listsAccount", listsAccount);
-		return "register";
+	public String register(Model model) {
+		return "register/register";
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerProcess(@ModelAttribute(name = "newAccount") Client acc, ModelMap model,
-			HttpServletRequest req) {
-		String randomNumber = UUID.randomUUID().toString();
-		acc.setHashSendMail(EncrytedPasswordUtils.encrytePassword(randomNumber));
-		acc.setPassword(EncrytedPasswordUtils.encrytePassword(acc.getPassword()));
-		clientService.save(acc);
-		List<String> roles = new ArrayList<String>();
-		roles.add("ROLE_USER");
-		roleService.createRoleFor(clientService.findUserClient(acc.getUserEmail()), roles);
-		model.addAttribute("message", "REGISTER_SUCCESS");
-		return "login";
+	public String registerProcess(Model model, @ModelAttribute(name = "newAccount") Client user,
+			HttpServletRequest request) {
+		try {
+			user = clientService.registerUser(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (user != null) {
+			String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+					+ request.getContextPath() + "/verify?email=" + user.getUserEmail() + "&code="
+					+ user.getHashSendMail();
+			sendMail.sendConfirmMail(user.getUserEmail(), url);
+		}
+		message = "REGISTER ACCOUNT SUCCESSFULLY";
+		model.addAttribute("userEmail", user.getUserEmail());
+		model.addAttribute("message", message);
+		return "notice/noticePage";
+	}
+
+	@RequestMapping(value = "/verify", method = RequestMethod.GET)
+	public String verifyUser(Model model, @Param("code") String code, @Param("email") String email) {
+		if (clientService.verify(code, email)) {
+			message = "VERIFY ACCOUNT SUCCESSFULLY";
+			model.addAttribute("userEmail", email);
+			model.addAttribute("message", message);
+			return "notice/noticePage";
+		} else {
+			return "/";
+		}
 	}
 
 	@RequestMapping(value = "/forgetpassword", method = RequestMethod.GET)
 	public String forgetPasswordGet() {
-		return "forgetPassword";
+		return "forget-password/forgetPassword";
 	}
 
 	@RequestMapping(value = "/forgetpassword", method = RequestMethod.POST)
-	public ModelAndView forgetPasswordPost(@RequestParam(name = "email") String email, HttpServletRequest req) {
-		ModelAndView mav = new ModelAndView("pageError");
-		mav.getModelMap().addAttribute("message", "WRONG");
-		Client acc = null;
+	public String forgetPasswordPost(Model model, @RequestParam(name = "email") String email, HttpServletRequest request) {
+
+		Client user = null;
+		String randomNumber = RandomString.make(64);
 		try {
-			acc = clientService.findUserClient(email);
+			user = clientService.findUserClient(email);
+			System.err.println(user.getUserEmail());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		try {
-			String randomNumber = UUID.randomUUID().toString();
-
-			acc.setHashSendMail(EncrytedPasswordUtils.encrytePassword(randomNumber));
-			clientService.save(acc);
-			String link = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort()
-					+ req.getContextPath() + "/forgetpasswordprocess?token1=" + acc.getUserEmail() + "&token2="
-					+ acc.getHashSendMail();
-			sendMail.sendResetEmail(acc.getUserEmail(), link);
-
-			mav.getModelMap().addAttribute("message", "FORGET_SUCCESS");
-			mav.setViewName("forgetPassword");
+			if (email.equals(user.getUserEmail())) {
+				user.setHashSendMail(randomNumber);
+				clientService.save(user);
+				String link = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+						+ request.getContextPath() + "/forgetpasswordprocess?email=" + user.getUserEmail() + "&code="
+						+ user.getHashSendMail();
+				sendMail.sendResetEmail(user.getUserEmail(), link);
+			} else {
+				message = "SOMETHING WRONG";
+				model.addAttribute("message", message);
+				return "notice/noticePage";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return mav;
+		message = "SEND MAIL TO FORGET PASSWORD SUCCESSFULLY";
+		model.addAttribute("userEmail", user.getUserEmail());
+		model.addAttribute("message", message);
+		return "notice/noticePage";
 	}
 
 	@RequestMapping(value = "/forgetpasswordprocess", method = RequestMethod.GET)
-	public String forgetPasswordProcessGet(HttpServletRequest req, ModelMap model) {
-		String token1 = "";
-		String token2 = "";
-		String mess = "WRONG";
-		Client acc = null;
+	public String forgetPasswordProcessGet(Model model, @Param("email") String email, @Param("code") String code,
+			HttpServletRequest request) {
+		Client user = null;
 		try {
-			token1 = req.getParameter("token1");
-			token2 = req.getParameter("token2");
-			acc = clientService.findUserClient(token1);
+			user = clientService.findUserClient(email);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (acc != null) {
 
-			if (token2.equals(acc.getHashSendMail())) {
-
-				model.addAttribute("userFullName", acc.getFirstName() + " " + acc.getLastName());
-				model.addAttribute("userEmail", token1);
-				model.addAttribute("hashCode", token2);
-
-				mess = "SUCCESS";
-				model.addAttribute("message", mess);
-				return "forgetPasswordProcess";
+		if (user != null) {
+			if (email.equals(user.getUserEmail()) && code.equals(user.getHashSendMail())) {
+				model.addAttribute("userFullName", user.getFirstName() + " " + user.getLastName());
+				model.addAttribute("userEmail", email);
+				model.addAttribute("hashCode", code);
 			}
 		}
-		model.addAttribute("message", mess);
-		return "errorPage";
+		return "forget-password/forgetPasswordProcess";
 	}
 
 	@RequestMapping(value = "/forgetpasswordprocess", method = RequestMethod.POST)
-	public String forgetPasswordProcessPost(HttpServletRequest req, ModelMap model) {
-		String mess = "WRONG";
+	public String forgetPasswordProcessPost(@RequestParam(value = "txtUserEmail") String email,
+			@RequestParam(value = "txtHashCode") String hashCode,
+			@RequestParam(value = "userPassword") String newPassword, Model model, HttpServletRequest request) {
+		Client user = null;
 		try {
-			String email = req.getParameter("txtUserEmail");
-			String hashCode = req.getParameter("txtHashCode");
-			String newPassword = req.getParameter("userPassword");
-			Client acc = clientService.findUserClient(email);
-			if (acc != null) {
-				if (hashCode.equals(acc.getHashSendMail())) {
-					acc.setPassword(EncrytedPasswordUtils.encrytePassword(newPassword));
-
-					clientService.save(acc);
-					mess = "CHANGE_PASSWORD_SUCCESS";
-					model.addAttribute("message", mess);
-				}
-			}
+			user = clientService.findUserClient(email);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "errorPage";
+		if (user != null) {
+			if (email.equals(user.getUserEmail()) && hashCode.equals(user.getHashSendMail())) {
+				user.setPassword(web.salons.securiry.EncrytedPasswordUtils.encrytePassword(newPassword));
+				clientService.save(user);
+			}
+		}
+		message = "CHANGE PASSWORD ACCOUNT SUCCESSFULLY";
+		model.addAttribute("userEmail", user.getUserEmail());
+		model.addAttribute("message", message);
+		return "notice/noticePage";
 	}
 }

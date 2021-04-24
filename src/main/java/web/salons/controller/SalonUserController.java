@@ -1,15 +1,17 @@
 package web.salons.controller;
 
 import java.util.List;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import web.salons.model.Salon;
 import web.salons.service.SalonService;
 
 @Controller
@@ -18,30 +20,51 @@ public class SalonUserController {
 	@Autowired
 	private SalonService salonService;
 
-	private String message = "";
-	
-	@RequestMapping(value = "/addressSalon")
-	public String address() {
-		return "addressSalon";
-	}
-	
-	@RequestMapping(value = "address/{city}", method = RequestMethod.GET)
-	public String listAddressByCity(ModelMap model, @PathVariable(value = "city") String city) {
-		List<Salon> listAddress = null;
+	@RequestMapping(value = "/address-salon/{city}", method = RequestMethod.GET)
+	public String handleGet(Model model, RedirectAttributes redirectAttrs, @PathVariable("city") String city) {
+		List<String[]> listCountSalon = null;
+		String address = "";
 		try {
-			
-			listAddress = salonService.findSalonByCity(city);
-			
+			listCountSalon = salonService.countSalonByCity();
 		} catch (Exception e) {
 			e.printStackTrace();
-			message = "SOMETHING WRONG";
-			System.err.println(message);
-			model.addAttribute("message", message);
-			return "errorPage";
 		}
-		message = "GET ALL SUCCESS";
-		System.err.println(message);
-		model.addAttribute("listAddress", listAddress);
-		return "listAddress";
+		System.err.println(city);
+		switch (city) {
+		case "dn":
+			for (String[] o : listCountSalon) {
+				if (deAccent(o[0]).equals("Đa Nang")) {
+					address = o[0] + " " + "(" + o[1] + ")";
+				} 
+			}
+			break;
+		case "hn":
+			for (String[] o : listCountSalon) {
+				if (deAccent(o[0]).equals("Ha Noi")) {
+					address = o[0] + " " + "(" + o[1] + ")";
+				}
+			}
+			break;
+		case "hcm":
+			for (String[] o : listCountSalon) {
+				if (deAccent(o[0]).equals("Ho Chi Minh")) {
+					address = o[0] + " " + "(" + o[1] + ")";
+				}
+			}
+			break;
+		case "other-city":
+			address = "Province-City";
+			break;
+		}
+
+		model.addAttribute("address", address);
+		return "addressSalon";
 	}
+
+	public String deAccent(String str) {
+		String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		return pattern.matcher(nfdNormalizedString).replaceAll("");
+	}
+
 }
