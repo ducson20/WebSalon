@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commonAdmin :: html_css">
+</head>
+<body>
+	<div th:replace='commonAdmin :: html_assets'></div>
+	<!-- Right Panel -->
+
+	<div id="right-panel" class="right-panel">
+
+		<div th:replace='commonAdmin :: html_header'></div>
+		<div class="content mt-3">
+			<div class="animated fadeIn">
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="card">
+
+							<div class="card-header">
+								<div class="col-md-8 col-sm-12 col-xs-8">
+									<a href="/admin/new/servicedetail"
+										class="btn btn-danger my-2 my-sm-0">New Detail Service</a>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input class="btn btn-danger" id="all-item" type="button"
+										value="All Item"> &nbsp;
+								</div>
+								<div class="col-md-3 col-xs-3">
+									<select class="custom-select service-id" id="service-id"
+										name="keyword">
+										<option value="" selected>Services</option>
+
+										<option th:each="listServices : ${listServices}"
+											th:value="${listServices.serviceId}"
+											th:attr="serviceId=${listServices.serviceId}, showselected=(${listServices.serviceId} == ${keyword})"
+											th:selected="(${listServices.serviceId} == ${keyword})"
+											th:text="${listServices.serviceName}"></option>
+									</select>
+								</div>
+
+							</div>
+
+							<div>
+								<form th:action="@{/admin/servicedetails/page/1}"
+									class="form-inline m-3">
+									<input type="hidden" name="sortField" th:value="${sortField}">
+									<input type="hidden" name="sortDir" th:value="${sortDir}">
+									Filter: &nbsp; <input type="search" name="keyword"
+										th:value=${keyword} class="form-control" required>&nbsp;
+									<input type="submit" value="Search" class="btn btn-primary">&nbsp;
+									<input type="button" value="Clear" class="btn btn-secondary">
+								</form>
+							</div>
+
+
+							<div class="card-body">
+								<table id="bootstrap-data-table-export"
+									class="table table-bordered">
+
+									<tr>
+										<th>Name</th>
+										<th><a th:if="${sortField != 'title'}"
+											th:href="@{'/admin/servicedetails/page/' + ${currentPage}  + '?sortField=title&sortDir=' + ${sortDir} + ${keyword !=null ? '&keyword=' + keyword : ''}}">
+												Title</a> <a th:if="${sortField == 'title'}"
+											th:href="@{'/admin/servicedetails/page/' + ${currentPage}  +'?sortField=title&sortDir=' + ${reverseSortDir} +  ${keyword !=null ? '&keyword=' + keyword : ''}}">Title</a>
+											<span th:if="${sortField == 'title'}"
+											th:class="${sortDir == 'asc' ? 'fa fa-sort-desc' : 'fa fa-sort-asc'}"></span>
+										</th>
+										<th>Main Image</th>
+										<th>Description</th>
+										<th>Content</th>
+										<th>Time To Complete</th>
+										<th>Price</th>
+										<th>Sale</th>
+										<th></th>
+									</tr>
+
+									<tr th:each="listServiceDetails : ${listServiceDetails}">
+										<td th:text="${listServiceDetails.services.serviceName}"></td>
+										<td th:text="${listServiceDetails.title}"></td>
+										<td><img
+											th:src="${listServiceDetails.photosServiceDetailImagePath}"
+											alt="abc" style="width: 200px"></td>
+										<td th:text="${listServiceDetails.descripttion}"></td>
+										<td th:text="${listServiceDetails.content}"></td>
+										<td th:text="${listServiceDetails.timeToComplete}"></td>
+										<td th:text="${listServiceDetails.price}"></td>
+										<td th:text="${listServiceDetails.sale}"></td>
+										<td><a
+											th:href="@{'/admin/servicedetail/edit?servicedetailid='+${listServiceDetails.serviceDetailId}}"
+											style="color: white;">
+												<button type="button" class="btn btn-primary btn-sm"
+													style="width: 80px">Edit</button> <br>
+										</a> <a
+											th:href="@{'/admin/servicedetail/delete?servicedetailid=' + ${listServiceDetails.serviceDetailId}}"
+											style="color: white;"> <br>
+												<button type="button" class="btn btn-danger btn-sm"
+													style="width: 80px">Delete</button>
+										</a></td>
+									</tr>
+								</table>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12">
+
+									<div
+										class="dataTables_paginate paging_simple_numbers pagintion"
+										id="bootstrap-data-table-export_paginate"
+										style="margin-left: 20px;">
+
+										<div class="text-center m-1" th:if="${totalItems > 0}">Total
+											Items: [[${totalItems}]]</div>
+										<div class="text-center m-1" th:unless="${totalItems > 0}">
+											<img src="/images/no-data.png"
+												style="margin: auto; position: absolute; top: 140%; left: 42%;">
+										</div>
+										<div th:if="${totalItems > 0}">
+											<nav>
+												<ul class="pagination justify-content-center">
+													<li
+														th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"
+														class="page-item"><a class="page-link"
+														th:href="@{'/admin/servicedetails/page/1' +'?sortField=title&sortDir=' + ${sortDir}  + ${keyword !=null ? '&keyword=' + keyword : ''}}">First</a></li>
+													<li
+														th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"
+														class="page-item"><a class="page-link"
+														th:href="@{'/admin/servicedetails/page/' + ${currentPage - 1} +' ?sortField=title&sortDir=' + ${sortDir} +  ${keyword !=null ? '&keyword=' + keyword : ''}} ">Previous</a></li>
+													<li
+														th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+														th:each="i: ${#numbers.sequence(1, totalPages)}"><a
+														class="page-link"
+														th:href="@{'/admin/servicedetails/page/' + ${i}  + '?sortField=title&sortDir=' + ${sortDir} +  ${keyword !=null ? '&keyword=' + keyword : ''}}">[[${i}]]</a>
+													</li>
+
+													<li
+														th:class="${currentPage > totalPages ? 'page-item' : 'page-item disabled'}"
+														class="page-item"><a class="page-link"
+														th:href="@{'/admin/servicedetails/page/' + ${currentPage + 1} + '?sortField=title&sortDir=' + ${sortDir} + ${keyword !=null ? '&keyword=' + keyword : ''}}">Next</a></li>
+													<li
+														th:class="${currentPage > totalPages ? 'page-item' : 'page-item disabled'}"
+														class="page-item"><a class="page-link"
+														th:href="@{'/admin/servicedetails/page/' + ${totalPages} + '?sortField=title&sortDir=' + ${sortDir} +  ${keyword !=null ? '&keyword=' + keyword : ''}}">Last</a></li>
+												</ul>
+											</nav>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- /#right-panel -->
+
+	<!-- Right Panel -->
+	<div th:replace='commonAdmin :: html_script'></div>
+	<script>
+		$('#all-item').click(function() {
+			window.location = "/admin/servicedetails";
+		})
+
+		$('.service-id')
+				.change(
+						function() {
+							var serviceID = $('#service-id').val();
+							if (serviceID === 'Services') {
+								window.location = '/admin/servicedetails';
+								$('.page-link')
+							} else {
+								window.location = '/admin/servicedetails?page=1&keyword='
+										+ serviceID;
+							}
+						})
+	</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commonUser :: html_css">
+</head>
+<body>
+	<div th:replace='commonUser :: html_navBar'></div>
+	<div th:replace='commonUser :: html_topBar'></div>
+	<div class="sufee-login d-flex align-content-center flex-wrap">
+		<div class="container">
+			<script
+				src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key"></script>
+			<div class="login-content">
+				<div class="login-logo">
+					<a href="index.html"> <img class="align-content"
+						src="images/logo.png" alt="">
+					</a>
+				</div>
+				<div class="login-form">
+					<form th:action="@{mapActionLogin}" method="POST" id="loginForm">
+
+						<div th:if="${param.otp}" id="success">
+							<p class="text-danger" style="text-align: center">
+								For security reason, we've sent an One-Time-Password (OTP) to
+								your email ${param.email}<br /> Kindly check your email and use
+								the provided OTP to login.<br> Note: The OTP will expire
+								after 5 minutes
+							</p>
+						</div>
+						<div th:if="${param.error}" id="success">
+							<p  class="text-danger" style="text-align: center">Invalid
+								email or password</p>
+						</div>
+						<div th:if="${param.lock}" id="success">
+							<p class="text-danger" style="text-align: center">Your
+								account has been locked due to 3 failed attempts. It will be
+								unlocked after 5 minutes</p>
+						</div>
+						<div th:if="${param.unLock}" id="success">
+							<p class="text-danger" style="text-align: center">You account
+								has been unlocked. Please try to login again</p>
+						</div>
+						<div th:if="${param.logout}" id="success">
+							<p class="text-warning" style="text-align: center">You have
+								been logged out</p>
+						</div>
+
+
+						<div class="form-group">
+							<label for="exampleInputEmail1" class="form-label">Email
+								address</label> <input type="email" class="form-control"
+								id="exampleInputEmail1" name="txtUserEmail" 
+								th:value="${param.email}" placeholder="Email">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1" class="form-label">Password</label>
+							<input type="password" class="form-control"
+								id="exampleInputPassword1" name="txtPassword"
+								th:placeholder="${param.otp != null ? 'Your one time password' : 'Password' }">
+						</div>
+						<div class="checkbox">
+							<div class="row">
+								<div class="col-lg-1 col-md-1">
+									<input type="checkbox" name="remember-me">
+								</div>
+								<div class="col-lg-6 col-md-6">
+									<label> Remember Me </label>
+								</div>
+								<div class="col-lg-5 col-md-5">
+									<label class="pull-right"> <a href="/forgetpassword">Forgotten
+											Password?</a>
+									</label>
+								</div>
+							</div>
+						</div>
+						<!-- 	<button type="submit" -->
+						<!-- 							class="btn btn-success btn-flat m-b-30 m-t-30 btn-login">Sign in</button> -->
+						<button
+							class="g-recaptcha btn btn-success btn-flat m-b-30 m-t-30 btn-login"
+							data-sitekey="6LfoTbMaAAAAAD4SrgpfLmrQfw_KgUH3jzctAaGL"
+							data-callback="onSubmit" data-action="submit">Sign in</button>
+
+						<div class="social-login-content">
+							<div class="social-button">
+								<!-- 								<a href="/oauth2/authorize-client/facebook">  -->
+								<a href="/oauth2/authorize-client/facebook">
+									<button type="button"
+										class="btn social facebook btn-flat btn-addon mb-3 btn-facebook">
+										<i class="ti-facebook"></i>Sign in with facebook
+									</button>
+								</a> <a href="/oauth2/authorize-client/google"> <!-- 								<a href="/oauth2/authorization/google"> -->
+
+									<button type="button"
+										class="btn social twitter btn-flat btn-addon mt-2">
+										<i class="ti-google"></i>Sign in with google
+									</button>
+								</a>
+							</div>
+						</div>
+						<div class="register-link m-t-15 text-center">
+							<p>
+								Don't have account ? <a href="/register"> Sign Up Here</a>
+							</p>
+						</div>
+						</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace='commonUser :: html_footer'></div>
+	<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+	<div th:replace='commonUser :: html_script'></div>
+
+	<script>
+		function onSubmit(token) {
+			document.getElementById('loginForm').submit();
+		}
+	</script>
+</body>
+</html>

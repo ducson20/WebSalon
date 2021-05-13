@@ -78,6 +78,12 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 		return user;
 	}
+	
+	@Override
+	public boolean isCheckUnique(String email) {
+		Client client = userRepository.findUserByEmail(email);
+		return client == null;
+	}
 
 	@Override
 	public boolean verify(String verificationCode, String userEmail) {
@@ -219,5 +225,7 @@ public class UserServiceImpl implements UserService {
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 		return userRepository.findAll(pageable);
 	}
+
+
 
 }

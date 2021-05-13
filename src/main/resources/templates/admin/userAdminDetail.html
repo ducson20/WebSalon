@@ -1,0 +1,125 @@
+
+
+<!DOCTYPE html>
+<html
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commonAdmin :: html_css">
+</head>
+<body>
+	<div th:replace='commonAdmin :: html_assets'></div>
+
+	<div id="right-panel" class="right-panel">
+		<div th:replace='commonAdmin :: html_header'></div>
+
+		<!-- <%@ include file="/WEB-INF/jsp/common-admin/breadcrumbs.jsp"%> -->
+		<div class="content mt-3">
+			<ul class="nav nav-tabs">
+				<li class="nav-item"><a class="nav-link active"
+					data-toggle="tab" href="#home">Overview</a></li>
+
+			</ul>
+			<div class="tab-content">
+				<div id="home" class="container tab-pane active">
+					<div class="animated fadeIn">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card">
+									<div class="card-header">
+										<strong>User Infomation</strong>
+									</div>
+									<div class="card-body card-block">
+										<div class="row form-group">
+											<div class="col col-md-3">
+												<label for="text-input" class=" form-control-label">User
+													Email</label>
+											</div>
+											<div class="col-12 col-md-9">
+												<input type="text" class="form-control"
+													th:value="${user.userEmail}" readonly>
+											</div>
+										</div>
+										<div class="row form-group">
+											<div class="col col-md-3">
+												<label for="text-input" class=" form-control-label">Full
+													Name</label>
+											</div>
+											<div class="col-12 col-md-9">
+												<input type="text" class="form-control"
+													th:value="(${user.lastName} + ${user.firstName})" readonly>
+											</div>
+										</div>
+										<div class="row form-group">
+											<div class="col col-md-3">
+												<label for="text-input" class=" form-control-label">
+													Gender </label>
+											</div>
+											<div class="col-12 col-md-9">
+												<input type="text" class="form-control"
+													th:value="${user.gender}" readonly>
+											</div>
+										</div>
+										<div class="row form-group">
+											<div class="col col-md-3">
+												<label for="text-input" class=" form-control-label">
+													Phone </label>
+											</div>
+											<div class="col-12 col-md-9">
+												<input type="text" class="form-control"
+													th:value="${user.phone}" readonly>
+											</div>
+										</div>
+										<div class="row form-group">
+											<div class="col col-md-3">
+												<label for="text-input" class=" form-control-label">
+													Role </label>
+											</div>
+
+											<div th:if="(${user.roles} == '[ROLE_ADMIN]')">
+												<form th:action="@{/admin/removeroleadmin}" method="POST">
+													<input type="hidden" name="userid" value="${user.userId}" />
+													<div class="col-5 col-md-4">
+														<input type="text" class="form-control"
+															value="Administrator" readonly="readonly">
+													</div>
+													<div class="col-3 col-md-2">
+														<input type="submit" class="btn btn-danger"
+															value="Cancel Admin Permissions">
+													</div>
+												</form>
+											</div>
+											<div th:unless="(${user.roles} == '[ROLE_ADMIN]')">
+												<form th:action="@{/admin/setroleadmin}" method="POST">
+													<input type="hidden" name="userid" value="${user.userId}" />
+													<div class="col-5 col-md-4">
+														<input type="text" class="form-control" value="User"
+															readonly="readonly">
+													</div>
+													<div class="col-3 col-md-2">
+														<input type="submit" class="btn btn-primary"
+															value="Set Admin Permissions">
+													</div>
+												</form>
+											</div>
+										</div>
+										<div>
+											<p class="text-center">
+												<a href="/admin/userdetails"><input type="button"
+													value="Cancel" class="btn btn-secondary" id="buttonCancel"></a>
+											<p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div th:replace='commonAdmin :: html_script'></div>
+</body>
+</html>

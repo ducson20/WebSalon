@@ -12,13 +12,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,7 +69,7 @@ public class ServiceAdminController {
 			e.printStackTrace();
 		}
 		model.addAttribute("message", message);
-		return "admin/formServices";
+		return "admin/formServicesAdd";
 	}
 
 	@RequestMapping(value = "/new/servicedetail", method = RequestMethod.POST)
@@ -218,7 +221,7 @@ public class ServiceAdminController {
 		model.addAttribute("serviceDetail", serviceDetail);
 		model.addAttribute("mainImage", mainImage);
 		model.addAttribute("listImageServiceDetail", listImageServiceDetail);
-		return "admin/formServices";
+		return "admin/formServicesEdit";
 	}
 
 	@RequestMapping(value = "servicedetail/delete", method = RequestMethod.GET)
@@ -239,32 +242,38 @@ public class ServiceAdminController {
 	}
 
 	@RequestMapping(value = "/servicedetails", method = RequestMethod.GET)
-	public String listServiceDetailByPage(ModelMap model,
-			@RequestParam(value = "page", required = false) Integer currentPage,
-			@RequestParam(value = "keyword", required = false) String keyword) {
-		Page<ServiceDetail> page = null;
-		List<ServiceDetail> listServiceDetails = null;
+	public String listFirstPage(Model model) {
+		return listServiceDetailByPage(model, 1, "title", "asc", null);
+	}
+
+	@RequestMapping(value = "/servicedetails/page/{page}", method = RequestMethod.GET)
+	public String listServiceDetailByPage(Model model, @PathVariable("page") Integer currentPage,
+//			@RequestParam(value = "keyword", required = false) String keyword,
+			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword) {
+
+		System.err.println("SortField: " + sortField);
+		System.err.println("SortDir: " + sortDir);
 		List<Services> listServices = null;
-		long totalItems = 0;
-		long totalPages = 0;
-		if (currentPage == null) {
-			currentPage = 1;
-		}
+		Page<ServiceDetail> page = serviceDetailSerivce.listAll(currentPage, sortField, sortDir, keyword);
+		List<ServiceDetail> listServiceDetails = page.getContent();
+		long totalItems = page.getTotalElements();
+		long totalPages = page.getTotalPages();
 		try {
 			listServices = serviceeService.findAll();
 			model.addAttribute("listServices", listServices);
-			page = serviceDetailSerivce.listAll(currentPage, keyword);
-			totalItems = page.getTotalElements();
-			totalPages = page.getTotalPages();
-			listServiceDetails = page.getContent();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("totalItems", totalItems);
 		model.addAttribute("listServiceDetails", listServiceDetails);
 		model.addAttribute("keyword", keyword);
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("reverseSortDir", reverseSortDir);
+
 		return "admin/formServiceDetail";
 
 	}

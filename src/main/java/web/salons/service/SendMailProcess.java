@@ -249,9 +249,9 @@ public class SendMailProcess {
 			MimeMessageHelper helper = new MimeMessageHelper(mess, true);
 			helper.setText(htmlEmail, true);
 
-			helper.addInline("logo", new File("../Salons/src/main/resources/static/emailimage/images/logo.png"));
-			helper.addInline("Img22x", new File("../Salons/src/main/resources/static/emailimage/images/Img22x.jpg"));
-			helper.addInline("footer", new File("../Salons/src/main/resources/static/emailimage/images/footer.png"));
+//			helper.addInline("logo", new File("../Salons/src/main/resources/static/images/logo.png"));
+//			helper.addInline("Img22x", new File("../Salons/src/main/resources/static/images/Img22x.jpg"));
+//			helper.addInline("footer", new File("../Salons/src/main/resources/static/images/footer.png"));
 
 			helper.setTo(emailTo);
 			helper.setSubject("Registration Confirmation");
@@ -493,9 +493,9 @@ public class SendMailProcess {
 			MimeMessageHelper helper = new MimeMessageHelper(mess, true);
 			helper.setText(htmlEmail, true);
 
-			helper.addInline("logo", new File("../Salons/src/main/resources/static/emailimage/images/logo.png"));
-			helper.addInline("Img22x", new File("../Salons/src/main/resources/static/emailimage/images/Img22x.jpg"));
-			helper.addInline("footer", new File("../Salons/src/main/resources/static/emailimage/images/footer.png"));
+//			helper.addInline("logo", new File("../Salons/src/main/resources/static/images/logo.png"));
+//			helper.addInline("Img22x", new File("../Salons/src/main/resources/static/images/Img22x.jpg"));
+//			helper.addInline("footer", new File("../Salons/src/main/resources/static/images/footer.png"));
 
 			helper.setTo(emailTo);
 			helper.setSubject("Reset Your Password");

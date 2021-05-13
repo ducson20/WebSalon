@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	>
+<head th:replace="commonUser :: html_css">
+
+</head>
+<body>
+
+<div th:replace='commonUser :: html_navBar'></div>
+	<div th:replace='commonUser :: html_topBar'></div>
+	<!-- Page Header Start -->
+	<!-- 	<div class="" style="background-color: #D5B981;"> -->
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<img
+					src="<% request.getContextPath(); %>/${firstImageOfServiceDetail[0].linkImage}"
+					alt="Image"
+					style="margin-top: 80px; margin-bottom: 30px; width: 100%; height: 400px;">
+			</div>
+		</div>
+	</div>
+	<!-- 	</div> -->
+	<!-- Page Header End -->
+
+	<!-- Service Start -->
+	<div class="service">
+		<div class="container">
+			<div class="section-header text-center">
+				<h2 style="font-weight: bold; font-family: monospace;">$${Math.round(listServiceDetail.price)}</h2>
+				<p
+					style="margin-top: 30px; margin-bottom: 80px; text-align: justify; font-style: initial; font-weight: bold;">${listServiceDetail.content}</p>
+			</div>
+			<div class="row">
+				<div class="col-lg-4 col-md-6">
+					<div class="service-item">
+						<div class="service-img">
+							<img
+								src="<% request.getContextPath(); %>/${firstImageOfServiceDetail[1].linkImage}"
+								alt="Image">
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div class="service-item">
+						<div class="service-img">
+							<img
+								src="<% request.getContextPath(); %>/${firstImageOfServiceDetail[2].linkImage}"
+								alt="Image">
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div class="service-item">
+						<div class="service-img">
+							<img
+								src="<% request.getContextPath(); %>/${firstImageOfServiceDetail[3].linkImage}"
+								alt="Image">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Service End -->
+	<div th:replace='commonUser :: html_footer'></div>
+
+	<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+	<div th:replace='commonUser :: html_script'></div>
+
+</body>
+</html>

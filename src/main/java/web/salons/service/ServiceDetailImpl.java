@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import web.salons.model.ServiceDetail;
@@ -13,11 +14,10 @@ import web.salons.repository.ServiceDetailRepository;
 
 @Service
 public class ServiceDetailImpl implements ServiceDetailSerivce {
-	
+
 	@Autowired
 	private ServiceDetailRepository serviceDetailRepository;
 
-	
 	@Override
 	public ServiceDetail save(ServiceDetail entity) {
 		return serviceDetailRepository.save(entity);
@@ -27,8 +27,7 @@ public class ServiceDetailImpl implements ServiceDetailSerivce {
 	public List<ServiceDetail> findAll() {
 		return serviceDetailRepository.findAll();
 	}
-	
-	
+
 	@Override
 	public void deleteById(Integer id) {
 		serviceDetailRepository.deleteById(id);
@@ -44,8 +43,11 @@ public class ServiceDetailImpl implements ServiceDetailSerivce {
 	}
 
 	@Override
-	public Page<ServiceDetail> listAll(int pageNumber, String keyword) {
-		Pageable pageable = PageRequest.of(pageNumber - 1, 5);
+	public Page<ServiceDetail> listAll(int pageNumber, String sortField, String sortDir, String keyword) {
+		Sort sort = Sort.by(sortField);
+
+		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+		Pageable pageable = PageRequest.of(pageNumber - 1, 5, sort);
 		if (keyword != null) {
 			return serviceDetailRepository.findAll(keyword, pageable);
 		}
@@ -62,6 +64,4 @@ public class ServiceDetailImpl implements ServiceDetailSerivce {
 		return serviceDetailRepository.countServiceDetailByServiceID(serviceID);
 	}
 
-	
-	
 }

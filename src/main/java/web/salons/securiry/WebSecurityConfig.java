@@ -142,23 +142,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				.authorizationEndpoint()
 				.baseUri("/oauth2/authorize-client")
 				.authorizationRequestRepository(authorizationRequestRepository());
+				
 		
 		http.logout()
 		.logoutUrl("/logout")
 		.logoutSuccessUrl("/login?logout=true")
-		.logoutSuccessHandler(new LogoutSuccessHandler() {
+//		.logoutSuccessHandler(new LogoutSuccessHandler() {
 			
-			@Override
-			public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-					throws IOException, ServletException {
-				System.out.println("This user logged out: " + authentication.getName());
-				response.sendRedirect("/login?logout=true");
-			}
-		})
-//		.logoutSuccessUrl("/login")
+//			@Override
+//			public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+//					throws IOException, ServletException {
+//				response.sendRedirect("/login?logout=true");
+//			}
+//		})
 		.invalidateHttpSession(true).deleteCookies("JSESSIONID")
 		.and()
-		.rememberMe().tokenRepository(persistentTokenRepository());
+		.rememberMe().tokenRepository(persistentTokenRepository())
+		.tokenValiditySeconds(1209600);
+;
+		
 
 //		.and().rememberMe().key("asdfghjklqwertyuio_1234567890").tokenValiditySeconds(7 * 24 * 60 * 60);
 		} catch (Exception e) {

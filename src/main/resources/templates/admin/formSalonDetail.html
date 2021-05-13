@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commonAdmin :: html_css">
+</head>
+<body>
+	<div th:replace='commonAdmin :: html_assets'></div>
+	<!-- Right Panel -->
+
+	<div id="right-panel" class="right-panel">
+
+		<div th:replace='commonAdmin :: html_header'></div>
+
+		<div class="content mt-3">
+			<div class="animated fadeIn">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="col-md-8 col-sm-12 col-xs-8">
+									<a href="/admin/new/salon" class="btn btn-danger my-2 my-sm-0">New
+										Salon</a>
+								</div>
+
+							</div>
+							<img th:if="${listSalons.empty}" src="/images/no-data.png"
+								style="margin: auto; position: absolute; top: 140%; left: 42%;">
+							<div class="card-body" style="display: flex; position: relative;">
+
+								<table id="bootstrap-data-table-export"
+									class="table table-bordered">
+
+									<tr>
+										<th>Salon Name</th>
+										<th>Image</th>
+										<th>Time Start</th>
+										<th>Time End</th>
+										<th>Road</th>
+										<th>Ward</th>
+										<th>City</th>
+										<th>Phone</th>
+										<th></th>
+									</tr>
+									<tr th:each="salon : ${listSalons}">
+										<td th:text="${salon.salonName}"></td>
+										<td><img th:src="${salon.photosImagePath}"
+											style="width: 150px; margin: auto;"></td>
+										<td th:text="${salon.timeStart}"></td>
+										<td th:text="${salon.timeEnd}"></td>
+										<td th:text="${salon.roadAndNumber}"></td>
+										<td th:text="${salon.ward}"></td>
+										<td th:text="${salon.city}"></td>
+										<td th:text="${salon.phone}"></td>
+
+										<td><a
+											th:href="@{'/admin/salon/edit?salon-id=' + ${salon.salonId}}"
+											style="color: white;">
+												<button type="button" class="btn btn-primary btn-sm"
+													style="width: 80px">Edit</button> <br>
+										</a> <a
+											href="@{'/admin/salon/delete?salon-id=' + ${salon.salonId}}"
+											style="color: white;"> <br>
+												<button type="button" class="btn btn-danger btn-sm"
+													style="width: 80px">Delete</button>
+										</a></td>
+									</tr>
+								</table>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12">
+									<div
+										class="dataTables_paginate paging_simple_numbers pagintion"
+										id="bootstrap-data-table-export_paginate"
+										style="margin-left: 20px;">
+										<div class="text-center m-1" th:if="${totalItems > 0}">Total
+											Items: [[${totalItems}]]</div>
+										<div class="text-center m-1" th:unless="${totalItems > 0}">No
+											user not found</div>
+
+										<nav>
+											<ul class="pagination justify-content-center">
+												<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}" class="page-item"><a class="page-link"
+													th:href="@{/admin/salons?page=1}">First</a></li>
+												<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}" class="page-item"><a class="page-link"
+													th:href="@{'/admin/salons?page=' + ${currentPage - 1}}">Previous</a></li>
+												<li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i: ${#numbers.sequence(1, totalPages)}" >
+												<a  class="page-link" th:href="@{'/admin/salons?page=' + ${i}}">[[${i}]]</a>
+												</li>	
+						
+												<li th:class="${currentPage > totalPages ? 'page-item' : 'page-item disabled'}" class="page-item"><a class="page-link"
+													th:href="@{'/admin/salons?page=' + ${currentPage + 1}}">Next</a></li>
+												<li th:class="${currentPage > totalPages ? 'page-item' : 'page-item disabled'}" class="page-item"><a class="page-link"
+													th:href="@{'/admin/salons?page=' + ${totalPages}}">Last</a></li>
+											</ul>
+										</nav>
+				
+										<!-- <ul class="pagination a">
+
+													<li class="paginate_button page-item previous"
+														id="bootstrap-data-table-export_previous"><c:choose>
+															<c:when test="${currentPage > 1}">
+																<c:if test="${keyword!=null}">
+																	<a
+																		href="/admin/salons?page=1&keyword=${keyword}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link">First</a>
+																</c:if>
+																<c:if test="${keyword==null}">
+																	<a href="/admin/salons?page=1"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link">First</a>
+																</c:if>
+															</c:when>
+															<c:otherwise>
+																<span><a href="#"
+																	aria-controls="bootstrap-data-table-export"
+																	class="page-link">First</a></span>
+															</c:otherwise>
+														</c:choose></li>
+													<li class="paginate_button page-item previous "
+														id="bootstrap-data-table-export_previous"><c:choose>
+															<c:when test="${currentPage > 1}">
+																<c:if test="${keyword!=null}">
+																	<a
+																		href="/admin/salons?page=${currentPage - 1}&keyword=${keyword}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link">Previous</a>
+																</c:if>
+																<c:if test="${keyword==null}">
+																	<a href="/admin/salons?page=${currentPage - 1}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link">Previous</a>
+																</c:if>
+															</c:when>
+															<c:otherwise>
+																<span><a href="#"
+																	aria-controls="bootstrap-data-table-export"
+																	class="page-link">Previous</a></span>
+															</c:otherwise>
+														</c:choose></li>
+													<c:forEach var="i" begin="1" end="${totalPages}">
+														<c:choose>
+															<c:when test="${i==currentPage}">
+																<c:if test="${keyword!=null}">
+																	<li class="paginate_button page-item active"><a
+																		href="/admin/salons?page=${currentPage}&keyword=${keyword}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link" id="url-a">${i}</a></li>
+																</c:if>
+																<c:if test="${keyword==null}">
+																	<li class="paginate_button page-item active"><a
+																		href="/admin/salons?page=${currentPage}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link" id="url-a">${i}</a></li>
+																</c:if>
+															</c:when>
+															<c:otherwise>
+																<c:if test="${keyword!=null}">
+																	<li class="paginate_button page-item"><a
+																		href="/admin/salons?page=${i}&keyword=${keyword}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link" id="url-a">${i}</a></li>
+																</c:if>
+																<c:if test="${keyword==null}">
+																	<li class="paginate_button page-item"><a
+																		href="/admin/salons?page=${i}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link" id="url-a">${i}</a></li>
+																</c:if>
+															</c:otherwise>
+														</c:choose>
+
+													</c:forEach>
+													<li class="paginate_button page-item next"
+														id="bootstrap-data-table-export_next"><c:choose>
+															<c:when test="${currentPage < totalPages}">
+																<c:if test="${keyword!=null}">
+																	<a
+																		href="/admin/salons?page=${currentPage + 1}&keyword=${keyword}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link">Next</a>
+																</c:if>
+																<c:if test="${keyword==null}">
+																	<a href="/admin/salons?page=${currentPage + 1}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link">Next</a>
+																</c:if>
+															</c:when>
+															<c:otherwise>
+																<span><a href="#"
+																	aria-controls="bootstrap-data-table-export"
+																	class="page-link">Next</a></span>
+															</c:otherwise>
+														</c:choose></li>
+													<li class="paginate_button page-item next"
+														id="bootstrap-data-table-export_next"><c:choose>
+															<c:when test="${currentPage < totalPages}">
+																<c:if test="${keyword!=null}">
+																	<a
+																		href="/admin/salons?page=${totalPages}&keyword=${keyword}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link">Last</a>
+																</c:if>
+																<c:if test="${keyword==null}">
+																	<a href="/admin/salons?page=${totalPages}"
+																		aria-controls="bootstrap-data-table-export"
+																		class="page-link">Last</a>
+																</c:if>
+															</c:when>
+															<c:otherwise>
+																<span><a href="#"
+																	aria-controls="bootstrap-data-table-export"
+																	class="page-link">Last</a></span>
+															</c:otherwise>
+														</c:choose></li>
+												</ul> -->
+									</div>
+								</div>
+							</div>
+							</c:otherwise>
+							</c:choose>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	<!-- /#right-panel -->
+
+	<!-- Right Panel -->
+	<div th:replace='commonAdmin :: html_script'></div>
+
+</body>
+</html>

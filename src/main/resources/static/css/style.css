@@ -256,6 +256,11 @@ a:hover, a:active, a:focus {
 	border-radius: 50%;
 }
 
+.dropdown-select span {
+	font-size: 16px;
+	padding-right: 22px
+}
+
 .dropdown-list {
 	border-radius: 4px;
 	position: absolute;
@@ -422,25 +427,70 @@ keyframes pulse-border { 0% {
 }
 
 100
+
+
 %
 {
 transform
+
+
 :
-translateX(
--50%
+
+
+translateX
+(
+
+
+-50
+%
+
+
 )
-translateY(
--50%
+
+
+translateY
+(
+
+
+-50
+%
+
+
 )
-translateZ(
+
+
+translateZ
+(
+
+
 0
+
+
 )
-scale(
-1.5
-);
+
+
+scale
+(
+
+
+1
+.5
+
+
+)
+;
+
+
 opacity
+
+
 :
-0;
+
+
+0
+;
+
+
 }
 }
 #videoModal .modal-dialog {
@@ -1964,17 +2014,15 @@ input.invalid {
 	justify-content: center;
 	/*     height: 60px; */
 	margin-top: 10px;
-	bottom:-185px;
+	bottom: -185px;
 }
 
 .my-appointment .content {
 	position: absolute;
 	top: 10px;
 	color: white;
-	
-	
-	
 }
+
 .my-appointment .content .time-to {
 	font-size: 18px;
 }
@@ -1982,6 +2030,7 @@ input.invalid {
 .my-appointment .content .item:not(:first-child) {
 	margin-top: 5px;
 }
+
 .my-appointment .cell button {
 	background: #fff;
 	border-radius: 8px;
@@ -1998,4 +2047,21 @@ input.invalid {
 .my-appointment .cell button:hover {
 	background: #fc3;
 	border-color: #fc3;
+}
+
+/*******************************/
+/********* NOTICE PAGE **********/
+/*******************************/
+.text-notice p {
+	font-size: 25px;
+	font-family: monospace;
+	color: black;
+}
+
+.text-notice .alert {
+	
+	display: flex;
+	justify-content: center;
+	margin: 0 auto;
+	margin-bottom: 30px;
 }

@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commonUser :: html_css">
+
+<link rel="stylesheet" href="/css/flickity.css" media="screen">
+</head>
+<body>
+<div th:replace='commonUser :: html_navBar'></div>
+	<div th:replace='commonUser :: html_topBar'></div>
+	<!-- MY APPOINTMENT START -->
+	<div class="my-appointment">
+		<div class="container">
+			<div class="carousel"
+				data-flickity='{ "freeScroll": true, "contain": true, "prevNextButtons": false, "pageDots": false }'>
+				<div class="carousel-cell">
+					<div class="row">
+						<div class="col content">
+							<div class="content">
+								<div class="time-to">
+									Only <span style="color: rgb(231, 65, 65);">2 days 10
+										hours 22 minutes </span> is to schedule an appointment Telephone *
+									9684
+								</div>
+								<div class="item" style="margin-top: 15px;">
+									<i class="fa fa-calendar" aria-hidden="true"></i> <span>Today,
+										Thursday, April 22, 8:40</span>
+								</div>
+								<div class="item">
+									<i class="fa fa-home" aria-hidden="true"></i> <span>236
+										Duong Ba Trac, Ward 1, District 8, Ho Chi Minh City</span>
+								</div>
+								<div class="item">
+									<i class="fa fa-user" aria-hidden="true"></i> <span>The
+										salon will choose the right stylist</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col cell">
+							<a href="/"><button style="margin-right: 18px">Cancel</button></a>
+							<a href="/"><button>Address</button></a>
+						</div>
+					</div>
+				</div>
+				<div class="carousel-cell">
+					<div class="row">
+						<div class="col content">
+							<div class="content">
+								<div class="time-to">
+									Only <span style="color: rgb(231, 65, 65);">2 days 10
+										hours 22 minutes </span> is to schedule an appointment Telephone *
+									9684
+								</div>
+								<div class="item" style="margin-top: 15px;">
+									<i class="fa fa-calendar" aria-hidden="true"></i> <span>Today,
+										Thursday, April 22, 8:40</span>
+								</div>
+								<div class="item">
+									<i class="fa fa-home" aria-hidden="true"></i> <span>236
+										Duong Ba Trac, Ward 1, District 8, Ho Chi Minh City</span>
+								</div>
+								<div class="item">
+									<i class="fa fa-user" aria-hidden="true"></i> <span>The
+										salon will choose the right stylist</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col cell">
+							<a href="/"><button style="margin-right: 18px">Cancel</button></a>
+							<a href="/"><button>Address</button></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- MY APPOINTMENT END -->
+			<div th:replace='commonUser :: html_footer'></div>
+	
+	<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+		<div th:replace='commonUser :: html_script'></div>
+
+
+	<script src="/js/flickity.pkgd.min.js"></script>
+</body>
+</html>

@@ -91,14 +91,17 @@ public class AppointmentController {
 
 			listService = serviceeService.findAll();
 
-			listServiceDetail = serviceDetailSerivce.findServiceDetailByServiceID("H");
+			listServiceDetail = serviceDetailSerivce.findServiceDetailByServiceID("HC");
 			model.addAttribute("listServiceDetailH", listServiceDetail);
 
 			listServiceDetail = serviceDetailSerivce.findServiceDetailByServiceID("HD");
+			model.addAttribute("listServiceDetailHD", listServiceDetail);
 
 			listServiceDetail = serviceDetailSerivce.findServiceDetailByServiceID("CH");
+			model.addAttribute("listServiceDetailCH", listServiceDetail);
 
 			listServiceDetail = serviceDetailSerivce.findServiceDetailByServiceID("OT");
+			model.addAttribute("listServiceDetailOT", listServiceDetail);
 
 			listAddressOfSalon = salonService.findAll();
 
@@ -128,12 +131,8 @@ public class AppointmentController {
 			listDate.add(dateFormat.format(result));
 			calendar.add(Calendar.DATE, 1);
 		}
-		System.err.println(listDate);
 		model.addAttribute("listDate", listDate);
 		model.addAttribute("listService", listService);
-		model.addAttribute("listServiceDetailHD", listServiceDetail);
-		model.addAttribute("listServiceDetailCH", listServiceDetail);
-		model.addAttribute("listServiceDetailOT", listServiceDetail);
 		model.addAttribute("listAddressOfSalon", listAddressOfSalon);
 		return "user/booking/appointment";
 	}
@@ -197,12 +196,11 @@ public class AppointmentController {
 
 	@RequestMapping(value = "my-appointment", method = RequestMethod.GET)
 	public String myAppointment(Model model, Authentication authentication) {
-		//Login defaut security
+		// Login defaut security
 		SalonUserDetials userDetail = (SalonUserDetials) authentication.getPrincipal();
-		//Login defaut ClientOAuth2User Facebook or google
+		// Login defaut ClientOAuth2User Facebook or google
 		ClientOAuth2User oAuth2User = (ClientOAuth2User) authentication.getPrincipal();
-		
-		
+
 		System.out.println(userDetail.getUser().getUserId());
 		return "user/booking/myAppointment";
 	}

@@ -1,17 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<!-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> -->
 
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Barber X - Barber Shop Template</title>
-<%@ include file="/WEB-INF/jsp/common-user/css.jsp"%>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="css :: html_css">
 </head>
 <body>
-	<%@ include file="/WEB-INF/jsp/common-user/topBar.jsp"%>
-	<%@ include file="/WEB-INF/jsp/common-user/navBar.jsp"%>
+	<div th:replace='navBar :: html_navBar'></div>
+	<div th:replace='topBar :: html_topBar'></div>
+	<!-- 	<%@ include file="/WEB-INF/jsp/common-user/topBar.jsp"%>
+	<%@ include file="/WEB-INF/jsp/common-user/navBar.jsp"%> -->
 	<!-- Page Header Start -->
 	<div class="page-header">
 		<div class="container">
@@ -34,7 +33,8 @@
 			<div class="row align-items-center">
 				<div class="col-lg-5 col-md-6">
 					<div class="about-img">
-						<img src="<% request.getContextPath(); %>/img/about.jpg" alt="Image">
+						<img src="/img/about.jpg"
+							alt="Image">
 					</div>
 				</div>
 				<div class="col-lg-7 col-md-6">
@@ -60,10 +60,12 @@
 		</div>
 	</div>
 	<!-- About End -->
+	<div th:replace='footer :: html_footer'></div>
 
-	<%@ include file="/WEB-INF/jsp/common-user/footer.jsp"%>
+	<!-- 	<%@ include file="/WEB-INF/jsp/common-user/footer.jsp"%> -->
 	<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-	<%@ include file="/WEB-INF/jsp/common-user/script.jsp"%>
+	<!-- 	<%@ include file="/WEB-INF/jsp/common-user/script.jsp"%> -->
+	<div th:replace='script :: html_script'></div>
 
 </body>
 </html>

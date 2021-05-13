@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,7 +46,7 @@ public class RESTController {
 	private AppointmentService appointmentService;
 
 	@Autowired
-	private UserService clientService;
+	private UserService userService;
 
 	@Autowired
 	private ServiceDetailSerivce serviceDetailSerivce;
@@ -147,10 +148,10 @@ public class RESTController {
 		if (principal != null) {
 			List<Object> nameAndEmail = new ArrayList<Object>();
 			try {
-				Client acc = clientService.findUserClient(loggedUser.getUserEmail());
+				Client acc = userService.findUserClient(loggedUser.getUserEmail());
 				session.setAttribute("fullName", acc.getLastName());
 				session.setMaxInactiveInterval(24 * 60 * 60);
-				loginName = clientService.findUserClient(loggedUser.getUserEmail()).getLastName();
+				loginName = userService.findUserClient(loggedUser.getUserEmail()).getLastName();
 				nameAndEmail.add(acc.getUserEmail());
 				nameAndEmail.add(loginName);
 				return nameAndEmail;
@@ -242,5 +243,12 @@ public class RESTController {
 			e.printStackTrace();
 		}
 		return listService;
+	}
+	
+	
+	@RequestMapping(value = "/checkUniqueUser", method = RequestMethod.POST)
+	public String checkUniqueClient(@Param("email") String email) {
+		System.err.println("run");
+		return userService.isCheckUnique(email) ? "OK" : "DUPLICATE";
 	}
 }

@@ -70,8 +70,10 @@ public class UserController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(Model model) {
-		return "register/register";
+		return "user/register/register";
 	}
+	
+	
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerProcess(Model model, @ModelAttribute(name = "newAccount") Client user,
@@ -107,7 +109,7 @@ public class UserController {
 
 	@RequestMapping(value = "/forgetpassword", method = RequestMethod.GET)
 	public String forgetPasswordGet() {
-		return "forget-password/forgetPassword";
+		return "user/forgetPass/forgetPassword";
 	}
 
 	@RequestMapping(value = "/forgetpassword", method = RequestMethod.POST)
@@ -160,7 +162,7 @@ public class UserController {
 				model.addAttribute("hashCode", code);
 			}
 		}
-		return "forget-password/forgetPasswordProcess";
+		return "/user/forgetPass/forgetPasswordProcess";
 	}
 
 	@RequestMapping(value = "/forgetpasswordprocess", method = RequestMethod.POST)

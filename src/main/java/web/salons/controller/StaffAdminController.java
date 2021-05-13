@@ -52,7 +52,7 @@ public class StaffAdminController {
 			e.printStackTrace();
 		}
 		model.addAttribute("listSalons", listSalons);
-		return "admin/formStaff";
+		return "admin/formStaffAdd";
 	}
 
 	@RequestMapping(value = "/new/staff", method = RequestMethod.POST)
@@ -100,13 +100,16 @@ public class StaffAdminController {
 			e.printStackTrace();
 		}
 		model.addAttribute("listSalons", listSalons);
+		System.err.println(listSalons);
+
 		timeStart = formater.format(staff.getTimeStart());
 		model.addAttribute("timeStart", timeStart);
 		timeEnd = formater.format(staff.getTimeEnd());
 		model.addAttribute("timeEnd", timeEnd);
+
 		model.addAttribute("staff", staff);
 		model.addAttribute("lSalonNameByStaff", lSalonNameByStaff);
-		return "admin/formStaff";
+		return "admin/formStaffEdit";
 	}
 
 	@RequestMapping(value = "staff/delete", method = RequestMethod.GET)

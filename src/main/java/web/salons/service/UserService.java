@@ -12,8 +12,8 @@ import web.salons.model.Client;
 
 public interface UserService {
 	
-	public static final int MAX_FAILED_ATTEMPT = 10;
-	public static final long LOCK_TIME_DURATION = 10  * 60 * 1000; //  10 minitu
+	public static final int MAX_FAILED_ATTEMPT = 3;
+	public static final long LOCK_TIME_DURATION = 5  * 60 * 1000; //  10 minitu
 
 	Client findUserClient(String userEmail);
 	
@@ -24,6 +24,8 @@ public interface UserService {
 	List<Client> findAll();
 
 	Client registerUser(Client user);
+	
+	boolean isCheckUnique(String email);
 	
 	boolean verify(String verificationCode, String userEmail);
 	

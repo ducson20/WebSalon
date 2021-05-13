@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<html
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commonAdmin :: html_css">
+</head>
+<body>
+	<!-- <div th:replace='commonAdmin :: html_assets'></div> -->
+
+	<!-- Right Panel -->
+	<div id="right-panel" class="right-panel">
+		<div th:replace='commonAdmin :: html_header'></div>
+		<!-- <%@ include file="/WEB-INF/jsp/common-admin/breadcrumbs.jsp"%> -->
+		<div class="col-lg-12">
+
+			<form th:action="@{/admin/new/servicedetail}" method="POST"
+				enctype="multipart/form-data" class="form-horizontal"
+				id="serviceDetailForm">
+				<div class="content mt-3">
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs">
+						<li class="nav-item"><a class="nav-link active"
+							data-toggle="tab" href="#home">Overview</a></li>
+						<li class="nav-item"><a class="nav-link" data-toggle="tab"
+							href="#menu1">Image</a></li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div id="home" class="container tab-pane active">
+							<div class="animated fadeIn">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="card">
+											<div class="card-header">
+
+												<strong>Edit Service Detail</strong>
+
+											</div>
+											<div class="card-body card-block">
+												<div class="row form-group">
+
+													<div class="col-12 col-md-4">
+														<label for="text-input" class=" form-control-label">Service
+															Detail ID </label>
+													</div>
+
+													<div class="col-12 col-md-8">
+														<input type="text" class="form-control serviceDetailId"
+															name="serviceDetailId"
+															th:value="${serviceDetail.serviceDetailId}"
+															readonly="readonly">
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-12 col-md-4">
+														<label for="text-input" class=" form-control-label">Service
+															Name</label>
+													</div>
+													<div class="col-12 col-md-8">
+														<select name="service" id="service-id"
+															class="form-control service-id">
+															<option th:each="service : ${listServices}"
+																th:value="${service.serviceId}"
+																th:attr="showselected=(${service.serviceName} == ${serviceDetail.services.serviceName})"
+																th:selected="(${service.serviceName} == ${serviceDetail.services.serviceName})"
+																th:text="${service.serviceName}" ></option>
+
+														</select>
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-12 col-md-4">
+														<label for="text-input" class=" form-control-label">Title
+														</label>
+													</div>
+													<div class="col-12 col-md-8">
+														<input type="text" class="form-control title" name="title"
+															th:value="${serviceDetail.title}">
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-12 col-md-4">
+														<label for="text-input" class=" form-control-label">Description
+														</label>
+													</div>
+													<div class="col-12 col-md-8">
+
+														<input type="text" class="form-control description"
+															name="description"
+															th:value="${serviceDetail.descripttion}">
+
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-12 col-md-4">
+														<label for="text-input" class=" form-control-label">Content
+														</label>
+													</div>
+													<div class="col-12 col-md-8">
+
+														<input type="text" class="form-control content"
+															name="content" th:value="${serviceDetail.content}">
+
+
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-12 col-md-4">
+														<label for="text-input" class=" form-control-label">Time
+															to complete </label>
+													</div>
+													<div class="col-12 col-md-8">
+
+														<input type="text" class="form-control timeToComplete"
+															name="timeToComplete"
+															th:value="${serviceDetail.timeToComplete}">
+
+
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-12 col-md-4">
+
+														<label for="text-input" class=" form-control-label">Price
+														</label>
+													</div>
+													<div class="col-12 col-md-8">
+
+														<input type="text" class="form-control price" name="price"
+															th:value="${serviceDetail.price}">
+
+													</div>
+												</div>
+
+												<div class="row form-group">
+													<div class="col-12 col-md-4">
+														<label for="text-input" class=" form-control-label">Sale
+														</label>
+													</div>
+													<div class="col-12 col-md-8">
+
+														<input type="text" class="form-control sale" name="sale"
+															th:value="${serviceDetail.sale}">
+
+
+													</div>
+												</div>
+												<div>
+													<p class="text-center">
+														<button type="submit" class="btn btn-danger">Save</button>
+														<a href="#">
+															<button type="submit" class="btn btn-secondary"
+																id="buttonCancel">Cancel</button>
+														</a>
+													<p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- .animated -->
+						</div>
+						<div id="menu1" class="container tab-pane fade">
+							<div class="row">
+								<div class="col border col-md-6 col-sm-6 col-xs-6">
+									<p>
+										<img id="thumbnail" alt="Main image preview"
+											th:src="${serviceDetail.photosServiceDetailImagePath}">
+									</p>
+									<p>
+										<label>Main Image</label>
+									<p>
+									<p>
+
+										<input type="file" name="primaryImage" id="primaryImage"
+											accept="image/png, image/jpeg, image/jpg,"
+											th:value="@{'/' + ${serviceDetail.mainImage}}">
+									<p>
+								</div>
+
+
+								<div th:each="list : ${listImageServiceDetail}"
+									class="col border col-md-6 col-sm-6 col-xs-6">
+									<p>
+										<img id="thumbnail0" alt="Main Image"
+											th:src="@{'/' + ${list.linkImage}}">
+									</p>
+									<p>
+										<label>Image 1:</label>
+									<p>
+									<p>
+										<input type="file" name="extraImage"
+											accept="image/png, image.jpeg" value="/${list.linkImage}">
+									<p>
+								</div>
+							</div>
+							<div>
+								<p class="text-center">
+									<button type="submit" class="btn btn-danger">Save</button>
+									<a href="#">
+										<button type="submit" class="btn btn-secondary"
+											id="buttonCancel">Cancel</button>
+									</a>
+								<p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- /#right-panel -->
+
+	<!-- Right Panel -->
+	<div th:replace='commonAdmin :: html_script'></div>
+	<script
+		src="<%=request.getContextPath()%>/ValidateForm/jquery.validate.js"></script>
+	<script
+		src="<%=request.getContextPath()%>/ValidateForm/serviceDetailForm.js"></script>
+	<script type="text/javascript">
+		$(document).ready(
+				function() {
+					var GoogleCalenderAppointments = null;
+
+					const checkGoogleCalendarConflict = function(date) {
+						var hasConflict = false;
+						if (!GoogleCalenderAppointments) {
+							//logic to get scheduled appointments
+						}
+						//iterate through relevant scheduled appointments
+						//if argument `date` has conflict, return true
+						//else, return false
+						return hasConflict;
+					}
+					const getTimeSlotsForDay = function(date) {
+						const timeSlots = [];
+						const dayStart = new Date(date);
+						const dayEnd = new Date(date);
+						dayStart.setHours(0, 0, 0, 0);
+						dayEnd.setHours(24, 0, 0, 0);
+
+						do {
+							if (!checkGoogleCalendarConflict(dayStart)) {
+								const todayFormat = moment(dayStart).format(
+										'HH:mm');
+								timeSlots.push(todayFormat);
+							}
+							dayStart.setHours(dayStart.getHours(), dayStart
+									.getMinutes() + 15);
+						} while (dayStart < dayEnd);
+						console.log(timeSlots)
+						timeSlots.map(function(value, index) {
+							console.log(value);
+							$('.time-start').append(
+									$('<option></option>').val(value).html(
+											value));
+						})
+						timeSlots.map(function(value, index) {
+							$('.time-end').append(
+									$('<option></option>').val(value).html(
+											value));
+
+						})
+					}
+					const today = new Date();
+					getTimeSlotsForDay(today);
+				})
+	</script>
+	<script type="text/javascript">
+		$('.list-fullNames')
+				.change(
+						function() {
+							var employeeID = $('.list-fullNames').val();
+							var urlString = '/listTimeOfEmp?employeeid='
+									+ employeeID;
+							$
+									.ajax({
+										method : "GET",
+										url : urlString,
+										dataType : "html",
+									})
+									.done(
+											function(timeOfEmp) {
+												const timeOfEmpToArr = timeOfEmp
+														.split(',');
+												const date = new Date();
+												const localTime = new Date(date);
+												const disableTime = timeOfEmpToArr
+														.filter(function(value,
+																i) {
+															const stringToDate = moment(
+																	value,
+																	'HH:mm')
+																	.toDate(
+																			date);
+															return stringToDate
+																	.getTime() > localTime
+																	.getTime();
+														});
+												//console.log(disableTime)
+												$('.list-time').html('');
+												disableTime
+														.map(function(value,
+																index) {
+															$('#timeEmp')
+																	.append(
+																			$(
+																					'<option></option>')
+																					.val(
+																							value)
+																					.html(
+																							value));
+														})
+											})
+						})
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$("#primaryImage").change(function() {
+				showImageThumbnail(this);
+			});
+
+			$("input[name='extraImage']").each(function(index) {
+				$(this).change(function() {
+					showExtraImageThumbnail(this, index);
+				});
+			});
+		});
+
+		function showImageThumbnail(fileInput) {
+			file = fileInput.files[0];
+			reader = new FileReader();
+
+			reader.onload = function(e) {
+				$("#thumbnail").attr('src', e.target.result);
+			};
+			reader.readAsDataURL(file);
+		}
+
+		function showExtraImageThumbnail(fileInput, index) {
+			file = fileInput.files[0];
+			reader = new FileReader();
+
+			reader.onload = function(e) {
+				$("#thumbnail" + index).attr('src', e.target.result);
+			};
+			reader.readAsDataURL(file);
+		}
+
+		function checkDuplId() {
+			var x = $('#productId').val();
+			var y = $('.id-product');
+			var check = false;
+			$.each($('.id-product'), function(i, val) {
+
+				if ($(val).val() == x) {
+					check = true;
+				}
+			})
+			if (check) {
+				$('#label').html("<small>Product ID is exit</small>").css({
+					"color" : "red",
+					"font-size" : "115%"
+				})
+			} else {
+				$('#label').html("");
+			}
+		}
+	</script>
+	<script>
+		$('.title').change(() => {
+			$.ajax({
+				 url: "/checkExitTitle",
+				 dataType: "json",
+			}).done((data) => {
+				console.log(data);
+				var textTitle = $('.title').val();
+				data.map((value) => {
+					if(value.title === textTitle){
+						$('#title-error').html("Title is exit. Please enter other title").css('color', 'red');
+					}
+				})
+			})
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:fragment="html_css">
+<meta charset="UTF-8">
+<title>Barber X - Barber Shop Luxury</title>
+<!-- Favicon -->
+
+<!-- <link href="<% request.getContextPath(); %>/img/favicon.ico" rel="icon"> -->
+
+
+<!-- Google Font -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap"
+	rel="stylesheet">
+
+<!-- CSS Libraries -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+	rel="stylesheet">
+<link href="/lib/animate/animate.min.css" rel="stylesheet">
+<link href="/lib/owlcarousel/assets/owl.carousel.min.css"
+	rel="stylesheet">
+<link href="/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+<!-- Template Stylesheet -->
+<link href="/css/style.css" rel="stylesheet">
+
+<!-- Login -->
+<!-- <link rel="stylesheet" -->
+<!-- 	href="admin/vendors/bootstrap/dist/css/bootstrap.min.css"> -->
+<link rel="stylesheet"
+	href="/vendors/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="/vendors/themify-icons/css/themify-icons.css">
+<link rel="stylesheet"
+	href="/vendors/flag-icon-css/css/flag-icon.min.css">
+<link rel="stylesheet" href="/vendors/selectFX/css/cs-skin-elastic.css">
+
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+	<div th:fragment="html_navBar">
+		<div class="navbar navbar-expand-lg bg-dark navbar-dark">
+			<div class="container-fluid">
+				<a href="/" class="navbar-brand">Barber <span>X</span>
+				</a>
+				<button type="button" class="navbar-toggler" data-toggle="collapse"
+					data-target="#navbarCollapse">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse justify-content-between"
+					id="navbarCollapse">
+					<div class="navbar-nav ml-auto">
+						<a href="/" class="nav-item nav-link">Home</a> <a href="/about-us"
+							class="nav-item nav-link active">About US</a> <a href="/services"
+							class="nav-item nav-link">Service</a> <a href="/gallery"
+							class="nav-item nav-link">Gallery</a> <a href="/contact"
+							class="nav-item nav-link">Contact</a>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:fragment="html_topBar">
+		<script
+			src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<!-- Top Bar Start -->
+		<div class="top-bar d-none d-md-block">
+			<div class="container-fluid">
+				<div class="row" style="justify-content: space-between;">
+					<div class="col-md-4">
+						<div class="top-bar-left">
+							<div class="text">
+								<h2>8:00 - 9:00</h2>
+								<p>Opening Hour Mon - Sun</p>
+							</div>
+							<div class="text">
+								<h2>+84912190936</h2>
+								<p>Call Us For Appointment</p>
+							</div>
+						</div>
+					</div>
+
+				 	<div class="col-lg-8 col-md-8">
+						<div class="top-bar-right">
+
+							<div sec:authorize="isAuthenticated()">
+								<div sec:authorize="hasRole('ROLE_USER')" style="display: flex;">
+									 <!-- Logged user: <span sec:authentication="name">Bob</span> Roles:
+									<span sec:authentication="principal.authorities">[ROLE_USER]</span>  -->
+
+									<div class="text">
+										<a class="btn btn-warning" href="/booking"><h2>Make
+												Appointment</h2></a>
+									</div>
+
+									<div class="text">
+										<a id="my-appointment" href="/my-appointment"><h2>
+												<i class="fab fa-black-tie"></i> My Appointment
+											</h2></a>
+									</div>
+									<div class="text">
+										<a href="#dsadsaaa"><h2 id="LoginName"
+												sec:authentication="name">
+												<i class="fa fa-user"></i> Bob
+											</h2></a>
+									</div>
+									<div class="text">
+										<th:url var="logout" value="/logout" />
+										<form th:action="@{logout}" method="post" id="logout-form"
+											name="logoutForm">
+											<input type="hidden" name="${_csrf.parameterName}"
+												value="${_csrf.token}" />
+										</form>
+
+										<a href="" id="logout">
+											<h2>
+												<i class="fas fa-sign-out-alt"></i> Logout
+											</h2>
+										</a>
+									</div>
+								</div>
+								<div sec:authorize="hasRole('ROLE_ADMIN')" style="display: flex;">
+									<div class="text">
+										<a class="btn btn-warning" href="/booking"><h2>Make
+												Appointment</h2></a>
+									</div>
+									<div class="text">
+										<a id="my-appointment" href="/my-appointment"><h2>
+												<i class="fab fa-black-tie"></i> My Appointment
+											</h2></a>
+									</div>
+									<div class="text">
+										<a href="/admin/servicedetails"><h2>
+												<i class="fab fa-black-tie"></i> Admin
+											</h2></a>
+									</div>
+									<div class="text">
+										<a href="#"><h2 id="LoginName">
+												<i class="fa fa-user"></i> Son
+											</h2></a>
+									</div>
+									<div class="text">
+										<th:url var="logout" value="/logout" />
+										<form th:action="@{logout}" method="post" id="logout-form"
+											name="logoutForm">
+											<input type="hidden" name="${_csrf.parameterName}"
+												value="${_csrf.token}" />
+										</form>
+
+										<a href="" id="logout">
+											<h2>
+												<i class="fas fa-sign-out-alt"></i> Logout
+											</h2>
+										</a>
+									</div>
+								</div>
+							</div>
+
+							<div sec:authorize="!isAuthenticated()" style="display: flex;">
+								<div class="text">
+									<a href="/login"><h2>
+											<i class="fas fa-user-lock"></i> Login
+										</h2></a>
+								</div>
+								<div class="text">
+									<a href="/register"><h2>
+											<i class="fas fa-user-plus"></i> Register
+										</h2></a>
+								</div>
+							</div>
+
+						</div>
+					</div> 
+
+					<!-- <div class="col-md-2">
+						<div class="top-bar-left">
+							<div class="dropdown">
+								<div class="dropdown-select"><span>Le Duc Son</span>  
+									<img alt="" src="images/son.jpg"> 
+									<i
+										class="fa fa-caret-down"></i>
+								</div>
+								<div class="dropdown-list">
+									<div class="dropdown-list_item">
+										<a href="#">my appointment</a>
+									</div>
+									<div class="dropdown-list_item">
+										<a href="#">my appointment</a>
+									</div>
+									<div class="dropdown-list_item">
+										<a href="/logout">Logout</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> -->
+				</div>
+			</div>
+		</div>
+		<!-- Top Bar End -->
+
+		<th:if test="${fullName == null }">
+			<script type="text/javascript">
+		$(document).ready(function() {
+			var urlString = "/loaduserfullname";
+			$.ajax({
+				method : "GET",
+				url : urlString
+			}).done(function(data) {
+				console.log(data)
+				console.log(data[0])
+				console.log(data[1])
+				var urlMyAppointment = '/my-appointment/' + data[0];
+				// 				$('#my-appointment').attr('href', urlMyAppointment);
+				// 				$("#LoginName").append(data[1]);
+			})
+		})
+	</script>
+
+		</th:if>
+		<script>
+	$(document).ready(function() {
+		$('#logout').click(function(event) {
+			event.preventDefault();
+			$('#logout-form').submit();
+		})
+	})
+</script>
+	</div>
+	<div th:fragment="html_footer">
+		<!-- Footer Start -->
+		<div class="footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-7">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="footer-contact">
+									<h2>Salon Address</h2>
+									<p>
+										<i class="fa fa-map-marker-alt"></i>123 Street, New York, USA
+									</p>
+									<p>
+										<i class="fa fa-phone-alt"></i>+012 345 67890
+									</p>
+									<p>
+										<i class="fa fa-envelope"></i>info@example.com
+									</p>
+									<div class="footer-social">
+										<a href=""><i class="fab fa-twitter"></i></a> <a href=""><i
+											class="fab fa-facebook-f"></i></a> <a href=""><i
+											class="fab fa-youtube"></i></a> <a href=""><i
+											class="fab fa-instagram"></i></a> <a href=""><i
+											class="fab fa-linkedin-in"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="footer-link">
+									<h2>Quick Links</h2>
+									<a href="">Terms of use</a> <a href="">Privacy policy</a> <a
+										href="">Cookies</a> <a href="">Help</a> <a href="">FQAs</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-5">
+						<div class="footer-newsletter">
+							<h2>Newsletter</h2>
+							<p>Lorem ipsum dolor sit amet elit. Quisque eu lectus a leo
+								dictum nec non quam. Tortor eu placerat rhoncus, lorem quam
+								iaculis felis, sed lacus neque id eros.</p>
+							<div class="form">
+								<input class="form-control" placeholder="Email goes here">
+								<button class="btn">Submit</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- Footer End -->
+	<div th:fragment="html_script">
+		<!-- JavaScript Libraries -->
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+		<script src="/lib/easing/easing.min.js"></script>
+		<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+		<script src="/lib/isotope/isotope.pkgd.min.js"></script>
+		<script src="/lib/lightbox/js/lightbox.min.js"></script>
+
+		<!-- Contact Javascript File -->
+		<script src="/mail/jqBootstrapValidation.min.js"></script>
+		<script src="/mail/contact.js"></script>
+
+		<!-- Template Javascript -->
+		<script src="/js/main.js"></script>
+
+
+		<!-- 		Login -->
+		<script src="/vendors/jquery/dist/jquery.min.js"></script>
+		<script src="/vendors/popper.js/dist/umd/popper.min.js"></script>
+		<script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="/assets/js/main.js"></script>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+		<script src="/sweet-alert/sweetalert2.all.min.js"></script>
+	</div>
+
+</body>
+</html>

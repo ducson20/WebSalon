@@ -17,7 +17,7 @@ public interface ServiceDetailRepository extends JpaRepository<ServiceDetail, In
 	@Query("SELECT sd FROM ServiceDetail sd WHERE sd.services.serviceId = ?1 ORDER BY sd.title ASC")
 	List<ServiceDetail> findServiceDetailByServiceID(String serviceID);
 	
-	@Query("SELECT sd FROM ServiceDetail sd WHERE sd.services.serviceId LIKE %?1")
+	@Query("SELECT sd FROM ServiceDetail sd WHERE CONCAT(sd.services.serviceName, ' ',sd.title, ' ', sd.content) LIKE %?1%")
 	Page<ServiceDetail> findAll(String keyword, Pageable pageable);
 	
 	@Query("SELECT sd FROM ServiceDetail sd WHERE sd.serviceDetailId = ?1")

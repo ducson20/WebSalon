@@ -52,7 +52,7 @@ public class SalonAdminController {
 
 	@RequestMapping(value = "/new/salon", method = RequestMethod.GET)
 	public String createSalonGet() {
-		return "admin/formSalon";
+		return "admin/formSalonAdd";
 	}
 
 	@RequestMapping(value = "/new/salon", method = RequestMethod.POST)
@@ -94,6 +94,8 @@ public class SalonAdminController {
 			Salon salon = new Salon(salonName, address, timeStartFor, timeEndFor, timeOfSalon, phone, city, ward);
 			try {
 				salonHolderID = insertSalon(salon).getSalonId();
+				System.err.println("Salon id" + salonHolderID);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -133,7 +135,7 @@ public class SalonAdminController {
 		}
 		model.addAttribute("listSalons", listSalons);
 		model.addAttribute("salon", salon);
-		return "admin/formSalon";
+		return "admin/formSalonEdit";
 	}
 
 	@RequestMapping(value = "salon/delete", method = RequestMethod.GET)

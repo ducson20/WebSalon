@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import web.salons.model.Salon;
 
 public interface SalonService {
-
+	
 	List<Salon> findAll();
 	
 	Salon save(Salon entity);

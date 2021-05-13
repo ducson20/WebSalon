@@ -13,7 +13,7 @@ import web.salons.repository.SalonRepository;
 
 @Service
 public class SalonServiceImpl implements SalonService {
-
+	public static final int SALONS_PER_PAGE = 5;
 	@Autowired
 	private SalonRepository salonRepository;
 
@@ -54,7 +54,7 @@ public class SalonServiceImpl implements SalonService {
 
 	@Override
 	public Page<Salon> listAll(int pageNumber, String keyword) {
-		Pageable pageable = PageRequest.of(pageNumber - 1, 5);
+		Pageable pageable = PageRequest.of(pageNumber - 1, SALONS_PER_PAGE);
 		if (keyword != null) {
 			return salonRepository.findAll(keyword, pageable);
 		}

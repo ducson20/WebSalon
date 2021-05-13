@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commonUser :: html_css">
+
+</head>
+<body>
+	<div th:replace='commonUser :: html_navBar'></div>
+	<div th:replace='commonUser :: html_topBar'></div>
+	<div style="margin-top: 15%; margin-bottom: 10%;">
+		<div class="text-notice text-center">
+
+			<div th:if="${message == 'REGISTER ACCOUNT SUCCESSFULLY' }"
+				class="alert alert-success" role="alert" style="width: 1000px;">
+				<p>Registration is successful. Please check</p>
+				<p th:text="${userEmail}"></p>
+				<p>to verify your account.</p>
+			</div>
+
+			<div th:if="${message == 'VERIFY ACCOUNT SUCCESSFULLY'}"
+				class="alert alert-success" role="alert" style="width: 1000px;">
+				<p>Account</p>
+				<p th:text="${userEmail}"></p>
+				<p>was active.</p>
+			</div>
+
+			<div
+				th:if="${message == 'SEND MAIL TO FORGET PASSWORD SUCCESSFULLY' }"
+				class="alert alert-success" role="alert" style="width: 1000px;">
+				<p>Please check your</p>
+				<p th:text=" ${userEmail}"></p>
+				<p>for the completion.</p>
+			</div>
+			<div th:if="${message == 'CHANGE PASSWORD ACCOUNT SUCCESSFULLY'}"
+				class="alert alert-success" role="alert" style="width: 1000px;">
+				<p>Password changed now you can login with</p>
+				<p th:text="${userEmail}."></p>
+			</div>
+
+
+
+			<div th:if="${message == 'SOMETHINH WRONG' }"
+				class="alert alert-dange" role="alert" style="width: 1000px;">
+				<p>Something was wrong</p>
+			</div>
+
+		</div>
+		<div class="text-center">
+			<a href="/">
+				<button type="button" class="btn btn-secondary">Click here
+					to return to the home page</button>
+			</a>
+		</div>
+	</div>
+	<div th:replace='commonUser :: html_footer'></div>
+
+</body>
+</html>
